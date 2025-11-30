@@ -69,7 +69,7 @@ function GalleryWalls() {
 
         {isLoading ? (
           <div className="flex-grow flex items-center justify-center">
-            <p className="text-xl font-medium text-[#442D1D] animate-pulse">Loading your masterpiece...</p>
+            <p className="text-xl font-medium text-[#442D1D] animate-pulse">Loading...</p>
           </div>
         ) : artworks.length === 0 ? (
           <div className="flex-grow flex flex-col items-center justify-center text-center px-4 -mt-20">
@@ -130,3 +130,4 @@ function GalleryWalls() {
 }
 
 export default GalleryWalls;
+
