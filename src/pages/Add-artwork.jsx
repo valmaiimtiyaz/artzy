@@ -12,6 +12,7 @@ function AddArtwork() {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const fileInputRef = useRef(null);
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -41,7 +42,7 @@ function AddArtwork() {
 
     try {
       const base64Image = await convertToBase64(imageFile);
-      const res = await fetch("http://localhost:5000/api/artworks", {
+      const res = await fetch(`${API_BASE_URL}/api/artworks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,79 +64,19 @@ function AddArtwork() {
       alert("Artwork saved successfully!");
       navigate("/gallery-walls");
     } catch (err) {
-      alert(err.message); 
+      alert(err.message);
     }
   };
 
   const inputFields = [
-    {
-      label: "Title",
-      val: title,
-      set: setTitle,
-      placeholder: "example: Girl with a Pearl Earring",
-      type: "text",
-    },
-    {
-      label: "Artist Name",
-      val: artist,
-      set: setArtist,
-      placeholder: "example: by Johannes Vermeer",
-      type: "text",
-    },
-    {
-      label: "Year Created",
-      val: year,
-      set: setYear,
-      placeholder: "",
-      type: "date",
-    },
-    {
-      label: "Category",
-      val: category,
-      set: setCategory,
-      placeholder: "painting, photography, digital art, etc",
-      type: "text",
-    },
+    { label: "Title", val: title, set: setTitle, placeholder: "example: Girl with a Pearl Earring", type: "text" },
+    { label: "Artist Name", val: artist, set: setArtist, placeholder: "example: by Johannes Vermeer", type: "text" },
+    { label: "Year Created", val: year, set: setYear, placeholder: "", type: "date" },
+    { label: "Category", val: category, set: setCategory, placeholder: "painting, photography, digital art, etc", type: "text" },
   ];
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
-      <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
-        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
-          {" "}
-          Artzy
-        </div>
-
-        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-xl font-montserrat">
-          <Link
-            to="/beranda"
-            className="hover:text-amber-700 transition duration-150 mr-8"
-          >
-            Home
-          </Link>
-          <Link
-            to="/gallery-walls"
-            className="hover:text-amber-700 transition duration-150 mr-8"
-          >
-            Gallery Walls{" "}
-          </Link>
-          <Link
-            to="/add-artwork"
-            className="hover:text-amber-700 transition duration-150 mr-8"
-          >
-            {" "}
-            Add Artwork
-          </Link>
-          <Link
-            to="/profile"
-            className="font-semibold py-1.5 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200 px-8"
-          >
-            {" "}
-            Profile
-          </Link>
-        </nav>
-      </header>
-
       <main className="flex-grow w-full px-16 py-8 beranda-bg">
         <h1 className="text-4xl font-bold text-center mt-10 mb-15 text-[#442D1D]">
           Add to Your Collection
@@ -146,38 +87,18 @@ function AddArtwork() {
             className="w-1/2 h-full rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
             onClick={() => fileInputRef.current.click()}
           >
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageChange}
-              accept="image/*"
-              className="hidden"
-            />
-
+            <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" className="hidden" />
             {imagePreview ? (
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="w-full h-full object-contain p-4"
-              />
+              <img src={imagePreview} alt="Preview" className="w-full h-full object-contain p-4" />
             ) : (
               <>
-                <img
-                  src={uploadIconPlaceholder}
-                  alt="Upload Icon"
-                  className="w-24 h-24 mb-4 opacity-70 text-[#442D1D]"
-                />
-                <p className="text-xl font-semibold text-[#442D1D]">
-                  Drag and Drop Image Files to Upload
-                </p>
+                <img src={uploadIconPlaceholder} alt="Upload Icon" className="w-24 h-24 mb-4 opacity-70 text-[#442D1D]" />
+                <p className="text-xl font-semibold text-[#442D1D]">Drag and Drop Image Files to Upload</p>
               </>
             )}
           </div>
 
-          <form
-            onSubmit={handleSave}
-            className="w-1/2 flex flex-col justify-between font-medium text-[#442D1D]"
-          >
+          <form onSubmit={handleSave} className="w-1/2 flex flex-col justify-between font-medium text-[#442D1D]">
             {inputFields.map((field, idx) => (
               <div key={idx} className="flex flex-col gap-2">
                 <label className="text-lg font-bold">{field.label}</label>
@@ -186,11 +107,10 @@ function AddArtwork() {
                   value={field.val}
                   onChange={(e) => field.set(e.target.value)}
                   placeholder={field.placeholder}
-                  className="w-full font-medium px-6 py-3 rounded-2xl outline-none placeholder-[#442D1D]/50  text-[#442D1D]/50 transition-all duration-200  backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+                  className="w-full font-medium px-6 py-3 rounded-2xl outline-none placeholder-[#442D1D]/50 text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
                 />
               </div>
             ))}
-
             <div className="flex flex-col gap-2">
               <label className="text-lg font-bold">Description</label>
               <textarea
@@ -201,21 +121,9 @@ function AddArtwork() {
                 className="w-full font-medium px-6 py-3 rounded-2xl outline-none resize-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               />
             </div>
-
             <div className="flex justify-end gap-6 mt-4">
-              <button
-                type="submit"
-                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
-              >
-                Save Artwork
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate("/gallery-walls")}
-                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
-              >
-                Cancel
-              </button>
+              <button type="submit" className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer">Save Artwork</button>
+              <button type="button" onClick={() => navigate("/gallery-walls")} className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer">Cancel</button>
             </div>
           </form>
         </div>
