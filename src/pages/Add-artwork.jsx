@@ -12,7 +12,7 @@ function AddArtwork() {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const fileInputRef = useRef(null);
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = "https://artzybackend.vercel.app";
 
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -133,3 +133,4 @@ function AddArtwork() {
 }
 
 export default AddArtwork;
+
