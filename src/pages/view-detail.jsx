@@ -8,7 +8,7 @@ function ViewDetail() {
   const [artwork, setArtwork] = useState(null);
   const [error, setError] = useState(null);
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("token");

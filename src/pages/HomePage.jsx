@@ -1,6 +1,6 @@
 import React from "react";
 import heroImage from "../assets/Rumah Fantasi 1.svg";
-import About from "../components/about";
+import About from "../components/About";
 import Gallery from "../components/Gallery";
 import HowItWorks from "../components/HowItWorks";
 import GetStarted from "../components/GetStarted";

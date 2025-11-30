@@ -9,7 +9,7 @@ function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = "https://artzybackend.vercel.app";
 
   async function handleSubmit(e) {
     e.preventDefault();
