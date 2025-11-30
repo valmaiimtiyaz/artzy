@@ -29,7 +29,7 @@ function GalleryWalls() {
       }
     };
     fetchArtworks();
-  }, []);
+  }, [navigate]); 
 
   const scrollLeft = () => {
     if (sliderRef.current) {
@@ -124,7 +124,7 @@ function GalleryWalls() {
               {artworks.map((art) => (
                 <div
                   key={art.id}
-                  className="flex-none w-95 bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-105 transition-transform duration-300"
+                  className="flex-none w-[350px] bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-105 transition-transform duration-300"
                 >
                   <div className="h-80 overflow-hidden flex justify-center mt-8 px-6">
                     <img
@@ -180,4 +180,3 @@ function GalleryWalls() {
 }
 
 export default GalleryWalls;
-
