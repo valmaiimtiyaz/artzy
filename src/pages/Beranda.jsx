@@ -4,13 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 function Beranda() {
   const [username, setUsername] = useState("User");
   const navigate = useNavigate(); 
-  const API_BASE_URL = "https://artzy-be.vercel.app"; 
+  const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (!token) {
-      navigate("/login");
+      navigate("/login"); 
       return;
     }
 
@@ -31,7 +30,6 @@ function Beranda() {
     };
     fetchProfile();
   }, [navigate]); 
-
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
       <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
