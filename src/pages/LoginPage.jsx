@@ -9,6 +9,8 @@ function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -19,7 +21,7 @@ function LoginPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -78,8 +80,7 @@ function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 
-               backdrop-blur-XL bg-[#442D1D]/25 border border-white/50 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+              className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/25 border border-white/50 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               placeholder="user@gmail.com"
             />
           </div>
@@ -93,8 +94,7 @@ function LoginPage() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 
-               backdrop-blur-XL bg-[#442D1D]/25 border border-white/50 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+                className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/25 border border-white/50 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
                 placeholder="••••••••"
               />
               <button
@@ -103,7 +103,6 @@ function LoginPage() {
                 className="absolute inset-y-0 right-5 flex items-center text-[#442D1D] cursor-pointer hover:scale-110 transition duration-300 ease-in-out"
               >
                 {showPassword ? (
-                  // Mata terbuka → ketutup (ada garis slash)
                   <svg
                     className="w-5 h-5"
                     viewBox="0 0 24 24"
@@ -115,7 +114,6 @@ function LoginPage() {
                     <path d="M2.25 2.25l19.5 19.5" strokeLinecap="round" />
                   </svg>
                 ) : (
-                  // Mata tertutup → terbuka
                   <svg
                     className="w-5 h-5"
                     viewBox="0 0 24 24"

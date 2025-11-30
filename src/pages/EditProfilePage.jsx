@@ -16,6 +16,8 @@ export default function EditProfilePage() {
     profile_pic: "",
   });
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -25,7 +27,7 @@ export default function EditProfilePage() {
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -88,7 +90,7 @@ export default function EditProfilePage() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/users/profile", {
+      const res = await fetch(`${API_BASE_URL}/api/users/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -124,7 +126,6 @@ export default function EditProfilePage() {
         onClick={() => navigate("/profile")}
         className="absolute top-6 left-6 z-20 flex items-center gap-2 text-[#442D1D] hover:text-[#372517] transition"
       >
-        {" "}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -263,8 +264,7 @@ export default function EditProfilePage() {
               type="submit"
               className="bg-[#442D1D] text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg hover:bg-[#2c1d13] hover:shadow-xl transform hover:-translate-y-1 transition-all flex items-center gap-2 cursor-pointer"
             >
-              <Save className="w-4 h-4" />
-              Save Changes
+              <Save className="w-4 h-4" /> Save Changes
             </button>
           </div>
         </form>

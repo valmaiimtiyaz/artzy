@@ -6,6 +6,8 @@ function GalleryWalls() {
   const [artworks, setArtworks] = useState([]);
   const sliderRef = useRef(null);
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -15,7 +17,7 @@ function GalleryWalls() {
 
     const fetchArtworks = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/artworks", {
+        const res = await fetch(`${API_BASE_URL}/api/artworks`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -131,7 +133,6 @@ function GalleryWalls() {
                       className="w-full h-full object-cover rounded-md shadow-sm"
                     />
                   </div>
-
                   <div className="p-6 flex flex-col justify-between flex-grow mt-[-0.5rem]">
                     <div className="mb-4">
                       <p className="text-xl font-bold text-[#442D1D] mb-1 leading-tight">
@@ -141,7 +142,6 @@ function GalleryWalls() {
                         by {art.artist}
                       </p>
                     </div>
-
                     <div
                       onClick={() => navigate(`/artwork/${art.id}`)}
                       className="text-sm font-medium italic text-[#442D1D] hover:text-[#6c4e3e] cursor-pointer mb-2"

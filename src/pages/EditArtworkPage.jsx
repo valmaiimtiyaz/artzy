@@ -18,6 +18,8 @@ function EditArtworkPage() {
     image: "",
   });
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -27,7 +29,7 @@ function EditArtworkPage() {
 
     const fetchArtwork = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/artworks/${id}`, {
+        const res = await fetch(`${API_BASE_URL}/api/artworks/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -91,7 +93,7 @@ function EditArtworkPage() {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/artworks/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/artworks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -118,7 +120,7 @@ function EditArtworkPage() {
 
   const inputFields = [
     {
-      label: "Title", 
+      label: "Title",
       name: "title",
       val: formData.title,
       placeholder: "example: Girl with a Pearl Earring",
@@ -139,7 +141,7 @@ function EditArtworkPage() {
       type: "date",
     },
     {
-      label: "Category", 
+      label: "Category",
       name: "category",
       val: formData.category,
       placeholder: "painting, photography, digital art, etc",
@@ -166,7 +168,6 @@ function EditArtworkPage() {
               accept="image/*"
               className="hidden"
             />
-
             {imagePreview ? (
               <img
                 src={imagePreview}
@@ -200,11 +201,10 @@ function EditArtworkPage() {
                   value={field.val}
                   onChange={handleChange}
                   placeholder={field.placeholder}
-                  className="w-full font-medium px-6 py-3 rounded-2xl outline-none placeholder-[#442D1D]/50  text-[#442D1D] transition-all duration-200  backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+                  className="w-full font-medium px-6 py-3 rounded-2xl outline-none placeholder-[#442D1D]/50 text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
                 />
               </div>
             ))}
-
             <div className="flex flex-col gap-2">
               <label className="text-lg font-bold">Description</label>
               <textarea
@@ -216,7 +216,6 @@ function EditArtworkPage() {
                 className="w-full font-medium px-6 py-3 rounded-2xl outline-none resize-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               />
             </div>
-
             <div className="flex justify-end gap-6 mt-4">
               <button
                 type="submit"

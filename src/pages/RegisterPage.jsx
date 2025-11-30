@@ -12,6 +12,8 @@ function RegisterPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
@@ -37,7 +39,7 @@ function RegisterPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
@@ -96,8 +98,7 @@ function RegisterPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 
-               backdrop-blur-lg bg-[#442D1D]/20 border border-white/60 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+              className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 backdrop-blur-lg bg-[#442D1D]/20 border border-white/60 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               placeholder="LoremKece25"
             />
           </div>
@@ -108,8 +109,7 @@ function RegisterPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 
-               backdrop-blur-lg bg-[#442D1D]/20 border border-white/60 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+              className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 backdrop-blur-lg bg-[#442D1D]/20 border border-white/60 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               placeholder="user@gmail.com"
             />
           </div>
@@ -121,8 +121,7 @@ function RegisterPage() {
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 
-                 backdrop-blur-lg bg-[#442D1D]/20 border border-white/60 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+                className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 backdrop-blur-lg bg-[#442D1D]/20 border border-white/60 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
                 placeholder="••••••••"
               />
               <button
@@ -130,37 +129,29 @@ function RegisterPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-5 flex items-center text-[#442D1D] cursor-pointer hover:scale-110 transition duration-300 ease-in-out"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  className="w-5 h-5 fill-none stroke-current"
-                >
-                  {showPassword ? (
-                    // Mata terbuka → ketutup (ada garis slash)
-                    <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M2.25 12s2.25-6 9.75-6 9.75 6 9.75 6-2.25 6-9.75 6-9.75-6-9.75-6z" />
-                      <path d="M2.25 2.25l19.5 19.5" strokeLinecap="round" />
-                    </svg>
-                  ) : (
-                    // Mata tertutup → terbuka
-                    <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M2.25 12s2.25-6 9.75-6 9.75 6 9.75 6-2.25 6-9.75 6-9.75-6-9.75-6z" />
-                      <circle cx="12" cy="12" r="2.25" />
-                    </svg>
-                  )}
-                </svg>
+                {showPassword ? (
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M2.25 12s2.25-6 9.75-6 9.75 6 9.75 6-2.25 6-9.75 6-9.75-6-9.75-6z" />
+                    <path d="M2.25 2.25l19.5 19.5" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M2.25 12s2.25-6 9.75-6 9.75 6 9.75 6-2.25 6-9.75 6-9.75-6-9.75-6z" />
+                    <circle cx="12" cy="12" r="2.25" />
+                  </svg>
+                )}
               </button>
             </div>
           </div>
@@ -172,8 +163,7 @@ function RegisterPage() {
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 
-                 backdrop-blur-lg bg-[#442D1D]/20 border border-white/60 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+                className="w-full px-5 py-3 rounded-full outline-none placeholder:text-[#9A8D83] transition-all duration-200 backdrop-blur-lg bg-[#442D1D]/20 border border-white/60 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
                 placeholder="••••••••"
               />
               <button
@@ -181,37 +171,29 @@ function RegisterPage() {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute inset-y-0 right-5 flex items-center text-[#442D1D] cursor-pointer hover:scale-110 transition duration-300 ease-in-out"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  className="w-5 h-5 fill-none stroke-current"
-                >
-                  {showConfirmPassword ? (
-                    // Mata terbuka → ketutup (ada garis slash)
-                    <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M2.25 12s2.25-6 9.75-6 9.75 6 9.75 6-2.25 6-9.75 6-9.75-6-9.75-6z" />
-                      <path d="M2.25 2.25l19.5 19.5" strokeLinecap="round" />
-                    </svg>
-                  ) : (
-                    // Mata tertutup → terbuka
-                    <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M2.25 12s2.25-6 9.75-6 9.75 6 9.75 6-2.25 6-9.75 6-9.75-6-9.75-6z" />
-                      <circle cx="12" cy="12" r="2.25" />
-                    </svg>
-                  )}
-                </svg>
+                {showConfirmPassword ? (
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M2.25 12s2.25-6 9.75-6 9.75 6 9.75 6-2.25 6-9.75 6-9.75-6-9.75-6z" />
+                    <path d="M2.25 2.25l19.5 19.5" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M2.25 12s2.25-6 9.75-6 9.75 6 9.75 6-2.25 6-9.75 6-9.75-6-9.75-6z" />
+                    <circle cx="12" cy="12" r="2.25" />
+                  </svg>
+                )}
               </button>
             </div>
           </div>

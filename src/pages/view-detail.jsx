@@ -1,5 +1,3 @@
-// frontend/src/pages/ViewDetail.jsx (Kode Revisi Penuh)
-
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Edit3 } from "lucide-react"; // Import ikon Edit
@@ -10,6 +8,8 @@ function ViewDetail() {
   const [artwork, setArtwork] = useState(null);
   const [error, setError] = useState(null);
 
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -19,7 +19,7 @@ function ViewDetail() {
 
     const fetchArtwork = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/artworks/${id}`, {
+        const res = await fetch(`${API_BASE_URL}/api/artworks/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -40,7 +40,7 @@ function ViewDetail() {
     if (window.confirm("Are you sure you want to delete this artwork?")) {
       const token = localStorage.getItem("token");
       try {
-        const res = await fetch(`http://localhost:5000/api/artworks/${id}`, {
+        const res = await fetch(`${API_BASE_URL}/api/artworks/${id}`, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -148,9 +148,7 @@ function ViewDetail() {
               </p>
             </div>
 
-            {/* START REVISI: Tambah tombol EDIT dan atur layout tombol */}
             <div className="pt-4 mt-auto border-t border-[#442D1D]/10 flex justify-between items-center">
-              {/* Tombol EDIT BARU */}
               <button
                 onClick={() => navigate(`/edit-artwork/${artwork.id}`)}
                 className="group flex items-center gap-3 text-[#442D1D] font-bold text-base hover:text-[#2c1d13] transition w-fit"
@@ -160,7 +158,6 @@ function ViewDetail() {
                 </div>
                 <span className="cursor-pointer">Edit Artwork</span>
               </button>
-              {/* Tombol DELETE LAMA */}
               <button
                 onClick={handleDelete}
                 className="group flex items-center gap-3 text-red-800 font-bold text-base hover:text-red-600 transition w-fit"
@@ -184,7 +181,6 @@ function ViewDetail() {
                 <span className="cursor-pointer">Delete Artwork</span>
               </button>
             </div>
-            {/* END REVISI */}
           </div>
         </div>
       </main>

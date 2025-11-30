@@ -12,6 +12,7 @@ function Profile() {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [artworkCount, setArtworkCount] = useState(0);
+  const API_BASE_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,7 +23,7 @@ function Profile() {
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -36,7 +37,7 @@ function Profile() {
 
     const fetchArtworks = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/artworks", {
+        const res = await fetch(`${API_BASE_URL}/api/artworks`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -72,7 +73,6 @@ function Profile() {
         <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
           Artzy
         </div>
-
         <nav className="flex items-center font-medium text-[#442D1D] px-8 text-xl font-montserrat">
           <Link
             to="/beranda"
@@ -121,7 +121,6 @@ function Profile() {
                   />
                 )}
               </div>
-
               <div>
                 <p className="text-2xl font-bold text-[#442D1D]">
                   {profileData.first_name} {profileData.last_name}
@@ -131,7 +130,6 @@ function Profile() {
                 </p>
               </div>
             </div>
-
             <button
               onClick={() => navigate("/edit-profile")}
               className="flex items-center space-x-2 bg-[#442D1D] text-white text-base font-semibold py-2 px-6 rounded-full shadow-md hover:bg-[#6c4e3e] transition duration-200 cursor-pointer"
