@@ -5,7 +5,6 @@ import About from "../components/About";
 import Gallery from "../components/Gallery";
 import HowItWorks from "../components/HowItWorks";
 import GetStarted from "../components/GetStarted";
-import { Link } from "react-router-dom";
 
 function HomePage() {
   
@@ -92,5 +91,6 @@ function HomePage() {
 }
 
 export default HomePage;
+
 
 
