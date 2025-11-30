@@ -3,13 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Beranda() {
   const [username, setUsername] = useState("User");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/login"); 
+      navigate("/login");
       return;
     }
 
@@ -20,6 +21,13 @@ function Beranda() {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem("token");
+          navigate("/login"); 
+          return;
+        }
+
         const data = await res.json();
         if (res.ok) {
           setUsername(data.username || "User");
@@ -29,41 +37,20 @@ function Beranda() {
       }
     };
     fetchProfile();
-  }, [navigate]); 
+  }, [navigate]);
+
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
       <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
         <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
-          {" "}
           Artzy
         </div>
 
         <nav className="flex items-center font-medium text-[#442D1D] px-8 text-xl font-montserrat">
-          <Link
-            to="/beranda"
-            className="hover:text-amber-700 transition duration-150 mr-8"
-          >
-            Home
-          </Link>
-          <Link
-            to="/gallery-walls"
-            className="hover:text-amber-700 transition duration-150 mr-8"
-          >
-            Gallery Walls
-          </Link>
-          <Link
-            to="/add-artwork"
-            className="hover:text-amber-700 transition duration-150 mr-8"
-          >
-            Add Artwork
-          </Link>
-          <Link
-            to="/profile"
-            className="font-semibold py-1.5 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200 px-8"
-          >
-            {" "}
-            Profile
-          </Link>
+          <Link to="/beranda" className="hover:text-amber-700 transition duration-150 mr-8">Home</Link>
+          <Link to="/gallery-walls" className="hover:text-amber-700 transition duration-150 mr-8">Gallery Walls</Link>
+          <Link to="/add-artwork" className="hover:text-amber-700 transition duration-150 mr-8">Add Artwork</Link>
+          <Link to="/profile" className="font-semibold py-1.5 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200 px-8">Profile</Link>
         </nav>
       </header>
 
