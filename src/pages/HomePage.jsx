@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate, Link } from "react-router-dom";
 import heroImage from "../assets/Rumah Fantasi 1.svg";
 import About from "../components/About";
 import Gallery from "../components/Gallery";
@@ -91,4 +92,5 @@ function HomePage() {
 }
 
 export default HomePage;
+
 
