@@ -7,6 +7,15 @@ import GetStarted from "../components/GetStarted";
 import { Link } from "react-router-dom";
 
 function HomePage() {
+  
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/beranda");
+    }
+  }, [navigate]);
+  
   return (
     <div className="bg-[#F4EFEB] min-h-screen flex flex-col scroll-smooth">
       <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
@@ -82,3 +91,4 @@ function HomePage() {
 }
 
 export default HomePage;
+
