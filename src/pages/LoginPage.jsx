@@ -9,7 +9,7 @@ function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const API_BASE_URL = https://artzybackend.vercel.app;
+  const API_BASE_URL = "https://artzybackend.vercel.app";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -179,4 +179,5 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
 
