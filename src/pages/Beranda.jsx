@@ -3,23 +3,27 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Beranda() {
   const [username, setUsername] = useState("User");
+  const navigate = useNavigate();
+  const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      useNavigate()("/login");
+      navigate("/login");
       return;
     }
 
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
+        const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
+
         const data = await res.json();
+
         if (res.ok) {
           setUsername(data.username || "User");
         }
@@ -28,7 +32,7 @@ function Beranda() {
       }
     };
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
