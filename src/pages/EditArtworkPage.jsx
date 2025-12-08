@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toastSuccess, toastError } from "../components/ToastWithProgress";
 import uploadIconPlaceholder from "../assets/ep_upload-filled.svg";
 
 function EditArtworkPage() {
@@ -48,7 +49,7 @@ function EditArtworkPage() {
           throw new Error(data.error || "Artwork not found!");
         }
       } catch (err) {
-        alert("Failed to load artwork data: " + err.message);
+        toastError("Failed to load artwork data: " + err.message);
         navigate("/gallery-walls");
       } finally {
         setIsLoading(false);
@@ -88,7 +89,7 @@ function EditArtworkPage() {
     const { image, title, artist } = formData;
 
     if (!image || !title || !artist) {
-      alert("Please ensure Image, Title, and Artist name are filled.");
+    toastError("Please ensure Image, Title, and Artist name are filled.");
       return;
     }
 
@@ -104,10 +105,10 @@ function EditArtworkPage() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to update artwork");
-      alert("Artwork updated successfully!");
+      toastSuccess("Artwork updated successfully!");
       navigate("/gallery-walls");
     } catch (err) {
-      alert(err.message);
+      toastError(err.message);
     }
   };
 

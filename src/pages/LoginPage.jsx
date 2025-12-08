@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import loginBg from "../assets/Rumah Fantasi 2.png";
+import { toastSuccess, toastError } from "../components/ToastWithProgress";
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -30,10 +31,11 @@ function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      localStorage.setItem("token", data.token); // simpen token
+      localStorage.setItem("token", data.token); 
+      toastSuccess("Login success!");
       navigate("/beranda");
     } catch (err) {
-      setError(err.message);
+      toastError(err.message);
     }
   };
 

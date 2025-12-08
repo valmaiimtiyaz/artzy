@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { User, Edit3 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
+import { toastSuccess, toastError } from "../components/ToastWithProgress";
 
 const formatDate = (dateString) => {
   if (!dateString) return "";
@@ -55,7 +56,7 @@ function Profile() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    alert("Logout Success!");
+    toastSuccess("Logout Success!");
     navigate("/login");
   };
 

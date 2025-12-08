@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Edit3 } from "lucide-react"; // Import ikon Edit
+import { Edit3 } from "lucide-react";
+import { toastSuccess, toastError } from "../components/ToastWithProgress";
+import ConfirmModal from "../components/ConfirmModal";
 
 function ViewDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [artwork, setArtwork] = useState(null);
   const [error, setError] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
@@ -37,22 +40,25 @@ function ViewDetail() {
   }, [id]);
 
   const handleDelete = async () => {
-    if (window.confirm("Are you sure you want to delete this artwork?")) {
-      const token = localStorage.getItem("token");
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/artworks/${id}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.ok) {
-          alert("Artwork deleted successfully!");
-          navigate("/gallery-walls");
-        } else {
-          throw new Error("Failed to delete!");
-        }
-      } catch (err) {
-        alert(err.message);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(`http://localhost:5000/api/artworks/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        toastSuccess("Artwork succesfully deleted!");
+        navigate("/gallery-walls");
+      } else {
+        const data = await res.json();
+        toastError(data.error || "Failed to delete artwork!");
       }
+    } catch (err) {
+      toastError("Failed to delete artwork!");
     }
   };
 
@@ -151,16 +157,16 @@ function ViewDetail() {
             <div className="pt-4 mt-auto border-t border-[#442D1D]/10 flex justify-between items-center">
               <button
                 onClick={() => navigate(`/edit-artwork/${artwork.id}`)}
-                className="group flex items-center gap-3 text-[#442D1D] font-bold text-base hover:text-[#2c1d13] transition w-fit"
+                className="group flex items-center gap-3 text-[#442D1D] font-bold text-base hover:text-[#2c1d13] transition w-fit cursor-pointer"
               >
                 <div className="p-2 bg-[#442D1D]/10 rounded-full group-hover:bg-[#442D1D]/20 transition">
                   <Edit3 className="w-4 h-4" />
                 </div>
-                <span className="cursor-pointer">Edit Artwork</span>
+                <span>Edit Artwork</span>
               </button>
               <button
                 onClick={handleDelete}
-                className="group flex items-center gap-3 text-red-800 font-bold text-base hover:text-red-600 transition w-fit"
+                className="group flex items-center gap-3 text-red-800 font-bold text-base hover:text-red-600 transition w-fit cursor-pointer"
               >
                 <div className="p-2 bg-red-800/10 rounded-full group-hover:bg-red-800/20 transition">
                   <svg
@@ -178,14 +184,24 @@ function ViewDetail() {
                     />
                   </svg>
                 </div>
-                <span className="cursor-pointer">Delete Artwork</span>
+                <span>Delete Artwork</span>
               </button>
             </div>
           </div>
         </div>
+        <ConfirmModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={confirmDelete}
+          title="Delete Artwork?"
+          message="This artwork will be permanently deleted. Are you sure?"
+          confirmText="Delete"
+          cancelText="Cancel"
+        />
       </main>
     </div>
   );
 }
 
 export default ViewDetail;
+  

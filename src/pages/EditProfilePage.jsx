@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Camera, Save, User, Trash2 } from "lucide-react";
+import { toastSuccess, toastError } from "../components/ToastWithProgress";
+import ConfirmModal from "../components/ConfirmModal";
 
 export default function EditProfilePage() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [photoPreview, setPhotoPreview] = useState(null);
+  const [isDeletePhotoModalOpen, setIsDeletePhotoModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     first_name: "",
@@ -59,7 +62,7 @@ export default function EditProfilePage() {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 10 * 1024 * 1024) {
-        alert("File size too large! Max 10MB.");
+        toastError("File size too large! Max 10MB.");
         return;
       }
       const reader = new FileReader();
@@ -72,17 +75,14 @@ export default function EditProfilePage() {
   };
 
   const handleDeletePhoto = () => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to remove your profile photo?"
-    );
+    setIsDeletePhotoModalOpen(true);
+  };
 
-    if (isConfirmed) {
-      setPhotoPreview(null);
-      setFormData((prev) => ({ ...prev, profile_pic: "" }));
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }
+  const confirmDeletePhoto = () => {
+    setPhotoPreview(null);
+    setFormData((prev) => ({ ...prev, profile_pic: "" }));
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    toastSuccess("Profile photo deleted!");
   };
 
   const handleSubmit = async (e) => {
@@ -101,13 +101,13 @@ export default function EditProfilePage() {
 
       const data = await res.json();
       if (res.ok) {
-        alert("Profile updated successfully!");
+        toastSuccess("Profile updated successfully!");
         navigate("/profile");
       } else {
         throw new Error(data.error || "Failed to update profile");
       }
     } catch (err) {
-      alert(err.message);
+      toastError(err.message);
     }
   };
 
@@ -160,10 +160,10 @@ export default function EditProfilePage() {
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}
-              className="absolute bottom-0 right-0 bg-[#442D1D] text-white p-2.5 rounded-full shadow-md hover:bg-[#6c4e3e] transition hover:scale-110 z-20"
+              className="absolute bottom-0 right-0 bg-[#442D1D] text-white p-2.5 rounded-full shadow-md hover:bg-[#6c4e3e] transition hover:scale-110 z-20 cursor-pointer"
               title="Change Photo"
             >
-              <Camera className="w-5 h-5 cursor-pointer" />
+              <Camera className="w-5 h-5" />
             </button>
             <input
               type="file"
@@ -177,10 +177,10 @@ export default function EditProfilePage() {
               <button
                 type="button"
                 onClick={handleDeletePhoto}
-                className="absolute bottom-0 -left-2 bg-red-500 text-white p-2.5 rounded-full shadow-md hover:bg-red-600 transition hover:scale-110 z-20"
+                className="absolute bottom-0 -left-2 bg-red-500 text-white p-2.5 rounded-full shadow-md hover:bg-red-600 transition hover:scale-110 z-20 cursor-pointer"
                 title="Remove Photo"
               >
-                <Trash2 className="w-5 h-5 cursor-pointer" />
+                <Trash2 className="w-5 h-5" />
               </button>
             )}
           </div>
@@ -269,6 +269,15 @@ export default function EditProfilePage() {
           </div>
         </form>
       </div>
+      <ConfirmModal
+        isOpen={isDeletePhotoModalOpen}
+        onClose={() => setIsDeletePhotoModalOpen(false)}
+        onConfirm={confirmDeletePhoto}
+        title="Delete photo profile?"
+        message="Your profile photo will be blank, continue?"
+        confirmText="Delete Photo"
+        cancelText="Cancel"
+      />
     </div>
   );
 }

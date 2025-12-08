@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toastSuccess, toastError } from "../components/ToastWithProgress";
 import uploadIconPlaceholder from "../assets/ep_upload-filled.svg";
 
 function AddArtwork() {
@@ -37,7 +38,7 @@ function AddArtwork() {
     const token = localStorage.getItem("token");
 
     if (!imageFile || !title || !artist) {
-      alert("Please upload an image and fill in Title and Artist name.");
+      toastError("Please upload an image and fill in Title and Artist name.");
       return;
     }
 
@@ -61,11 +62,10 @@ function AddArtwork() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save artwork");
-
-      alert("Artwork saved successfully!");
+      toastSuccess("Artwork saved successfully!");
       navigate("/gallery-walls");
     } catch (err) {
-      alert(err.message);
+      toastError(err.message); 
     }
   };
 
