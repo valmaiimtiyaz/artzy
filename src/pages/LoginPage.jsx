@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import loginBg from "../assets/Rumah Fantasi 2.png";
 import { toastSuccess, toastError } from "../components/ToastWithProgress";
@@ -10,7 +10,14 @@ function LoginPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const API_BASE_URL = "https://artzybackend.vercel.app" ;
+  const API_BASE_URL = "https://artzybackend.vercel.app";
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/beranda");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +38,7 @@ function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
 
-      localStorage.setItem("token", data.token); 
+      localStorage.setItem("token", data.token);
       toastSuccess("Login success!");
       navigate("/beranda");
     } catch (err) {
