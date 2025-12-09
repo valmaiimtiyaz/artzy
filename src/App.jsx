@@ -12,6 +12,7 @@ import Profile from "./pages/Profil";
 import ForgotPassPage from "./pages/forgotpass";
 import EditProfilePage from "./pages/EditProfilePage";
 import EditArtworkPage from "./pages/EditArtworkPage";
+import PublicProfile from "./pages/PublicProfile";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/edit-artwork/:id" element={<EditArtworkPage />} />
+        <Route path="/user/:username" element={<PublicProfile />} />
       </Routes>
       <Toaster />
     </Router>

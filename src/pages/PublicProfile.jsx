@@ -1,28 +1,37 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
-function GalleryWalls() {
+function PublicProfile() {
+  const { username } = useParams(); 
   const navigate = useNavigate();
   const [artworks, setArtworks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [userFound, setUserFound] = useState(true);
+
   const sliderRef = useRef(null);
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-      return;
-    }
+    const token = localStorage.getItem("token"); 
 
-    const fetchArtworks = async () => {
+    const fetchUserArtworks = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`${API_BASE_URL}/api/artworks`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `${API_BASE_URL}/api/artworks/user/${username}`,
+          {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          }
+        );
+
+        if (res.status === 404) {
+          setUserFound(false);
+          setIsLoading(false);
+          return;
+        }
+
         const data = await res.json();
         if (res.ok) {
           setArtworks(data);
@@ -33,12 +42,19 @@ function GalleryWalls() {
         setIsLoading(false);
       }
     };
-    fetchArtworks();
-  }, []);
+
+    fetchUserArtworks();
+  }, [username]);
 
   const handleLike = async (e, artworkId) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login to like artworks!");
+      navigate("/login");
+      return;
+    }
 
     setArtworks((prev) =>
       prev.map((art) => {
@@ -130,58 +146,70 @@ function GalleryWalls() {
 
       <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
         <div className="relative flex justify-center items-center mt-10 px-10">
-          <h1 className="text-4xl font-bold text-[#442D1D]">Gallery Walls</h1>
+          <h1 className="text-4xl font-bold text-[#442D1D] capitalize">
+            {userFound ? `${username}'s Walls` : "User Not Found"}
+          </h1>
 
-          <div className="absolute right-10 lg:right-20">
-            <button
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center gap-2 bg-[#442D1D] text-white px-4 py-2 rounded-full shadow hover:bg-[#5e3f2b] transition"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-5"
+          {userFound && (
+            <div className="absolute right-10 lg:right-20">
+              <button
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className="flex items-center gap-2 bg-[#442D1D] text-white px-4 py-2 rounded-full shadow hover:bg-[#5e3f2b] transition"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
-                />
-              </svg>
-              <span className="text-sm font-medium">
-                {selectedCategory === "All" ? "Filter" : selectedCategory}
-              </span>
-            </button>
-
-            {isFilterOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl z-50 border border-gray-200 overflow-hidden">
-                <div className="py-1">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => {
-                        setSelectedCategory(cat);
-                        setIsFilterOpen(false);
-                      }}
-                      className={`block w-full text-left px-4 py-3 text-sm hover:bg-[#F4EFEB] transition ${
-                        selectedCategory === cat
-                          ? "font-bold text-[#442D1D] bg-[#F4EFEB]"
-                          : "text-gray-700"
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+                  />
+                </svg>
+                <span className="text-sm font-medium">
+                  {selectedCategory === "All" ? "Filter" : selectedCategory}
+                </span>
+              </button>
+              {isFilterOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl z-50 border border-gray-200 overflow-hidden">
+                  <div className="py-1">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCategory(cat);
+                          setIsFilterOpen(false);
+                        }}
+                        className={`block w-full text-left px-4 py-3 text-sm hover:bg-[#F4EFEB] transition ${
+                          selectedCategory === cat
+                            ? "font-bold text-[#442D1D] bg-[#F4EFEB]"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {isLoading ? (
+        {!userFound ? (
+          <div className="flex-grow flex flex-col items-center justify-center text-center px-4 -mt-10">
+            <p className="text-2xl font-medium text-[#442D1D] opacity-90">
+              Oops! We couldn't find user "{username}".
+            </p>
+            <Link to="/beranda" className="mt-4 underline text-[#442D1D]">
+              Search Again
+            </Link>
+          </div>
+        ) : isLoading ? (
           <div className="flex-grow flex items-center justify-center w-full px-10">
             <div className="flex gap-12 overflow-hidden w-full max-w-7xl items-center px-12">
               {[1, 2, 3].map((item) => (
@@ -199,18 +227,8 @@ function GalleryWalls() {
         ) : filteredArtworks.length === 0 ? (
           <div className="flex-grow flex flex-col items-center justify-center text-center px-4 -mt-10">
             <p className="text-2xl font-medium text-[#442D1D] mb-8 opacity-90">
-              {artworks.length === 0
-                ? "looks a little empty here.. start your collection"
-                : `No artworks found in "${selectedCategory}" category.`}
+              looks a little empty here.. this user hasn't posted yet.
             </p>
-            {artworks.length === 0 && (
-              <button
-                onClick={() => navigate("/add-artwork")}
-                className="bg-[#442D1D] text-[#F4EFEB] text-xl font-medium py-3 px-12 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
-              >
-                + Add Artwork
-              </button>
-            )}
           </div>
         ) : (
           <div className="flex-grow flex items-center justify-center w-full px-10 relative pb-20">
@@ -241,9 +259,9 @@ function GalleryWalls() {
             >
               {filteredArtworks.map((art) => (
                 <div
-                  key={art.id || art._id}
+                  key={art.id}
                   className="flex-none w-95 bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-105 transition-transform duration-300 relative group cursor-pointer"
-                  onClick={() => navigate(`/artwork/${art.id || art._id}`)}
+                  onClick={() => navigate(`/artwork/${art.id}`)}
                 >
                   <div className="absolute top-4 right-4 bg-white/80 px-3 py-1 rounded-full text-xs font-bold text-[#442D1D] shadow-sm z-10">
                     {art.category}
@@ -326,4 +344,4 @@ function GalleryWalls() {
   );
 }
 
-export default GalleryWalls;
+export default PublicProfile;

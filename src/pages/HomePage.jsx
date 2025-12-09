@@ -9,33 +9,33 @@ import { Link } from "react-router-dom";
 function HomePage() {
   return (
     <div className="bg-[#F4EFEB] min-h-screen flex flex-col scroll-smooth">
-      <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
-        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
+      <header className="sticky top-0 z-50 flex justify-between items-center px-10 py-5 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md gap-4">
+        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-4">
           Artzy
         </div>
 
-        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-xl font-montserrat">
+        <nav className="flex items-center font-medium text-[#442D1D] text-lg font-montserrat gap-6">
           <a
             href="#about"
-            className="hover:text-amber-700 transition duration-150 mr-8"
+            className="hover:text-amber-700 transition duration-150"
           >
             About
           </a>
           <a
             href="#gallery"
-            className="hover:text-amber-700 transition duration-150 mr-8"
+            className="hover:text-amber-700 transition duration-150"
           >
             Gallery
           </a>
           <a
             href="#howitworks"
-            className="hover:text-amber-700 transition duration-150 mr-8"
+            className="hover:text-amber-700 transition duration-150"
           >
             How It Works
           </a>
           <Link
             to="/login"
-            className="font-semibold py-1.5 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200 px-8"
+            className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
           >
             Login
           </Link>

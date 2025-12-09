@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { User, Edit3 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import { toastSuccess, toastError } from "../components/ToastWithProgress";
+import { toastSuccess } from "../components/ToastWithProgress";
 
 const formatDate = (dateString) => {
   if (!dateString) return "";
@@ -13,7 +13,11 @@ function Profile() {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
   const [artworkCount, setArtworkCount] = useState(0);
-  const API_BASE_URL = "https://artzybackend.vercel.app";
+
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:5000"
+      : "https://artzybackend.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -32,7 +36,7 @@ function Profile() {
           setProfileData(data);
         }
       } catch (err) {
-        console.error(err);
+        console.error("failed to fetch profile:", err);
       }
     };
 
@@ -42,17 +46,22 @@ function Profile() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
+
         if (res.ok) {
-          setArtworkCount(data.length);
+          if (Array.isArray(data)) {
+            setArtworkCount(data.length);
+          } else {
+            setArtworkCount(0);
+          }
         }
       } catch (err) {
-        console.error(err);
+        console.error("failed to load artwork:", err);
       }
     };
 
     fetchProfile();
     fetchArtworks();
-  }, []);
+  }, [navigate, API_BASE_URL]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -70,32 +79,32 @@ function Profile() {
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]/50">
-      <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
-        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
+      <header className="sticky top-0 z-50 flex justify-between items-center px-10 py-5 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md gap-4">
+        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-4">
           Artzy
         </div>
-        <nav className="flex items-center font-medium text-[#442D1D] px-8 text-xl font-montserrat">
+        <nav className="flex items-center font-medium text-[#442D1D] text-lg font-montserrat gap-6">
           <Link
             to="/beranda"
-            className="hover:text-amber-700 transition duration-150 mr-8"
+            className="hover:text-amber-700 transition duration-150"
           >
             Home
           </Link>
           <Link
             to="/gallery-walls"
-            className="hover:text-amber-700 transition duration-150 mr-8"
+            className="hover:text-amber-700 transition duration-150"
           >
             Gallery Walls
           </Link>
           <Link
             to="/add-artwork"
-            className="hover:text-amber-700 transition duration-150 mr-8"
+            className="hover:text-amber-700 transition duration-150"
           >
             Add Artwork
           </Link>
           <Link
             to="/profile"
-            className="font-semibold py-1.5 border border-gray-500 rounded-3xl bg-[#442D1D] text-white transition duration-200 px-8"
+            className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
           >
             Profile
           </Link>
@@ -127,7 +136,7 @@ function Profile() {
                   {profileData.first_name} {profileData.last_name}
                 </p>
                 <p className="text-lg text-[#442D1D]/70">
-                  {profileData.handle}
+                  {profileData.handle || `@${profileData.username}`}
                 </p>
               </div>
             </div>
