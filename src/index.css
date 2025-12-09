@@ -4,14 +4,25 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
+html, body, #root {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #9d9167; 
 }
 
 h2[id] {
   padding-top: 6rem;
   margin-top: -6rem;
   scroll-margin-top: 2rem;
+}
+
+.beranda-bg {
+  background-image: linear-gradient(#f4efeb 5%, #c3b187 40%, #9d9167 100%);
+  background-attachment: fixed; 
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 100vh;
 }
 
 .gallery-gradient-bg {
@@ -24,10 +35,6 @@ h2[id] {
 
 .get-started-bg {
   background: radial-gradient(#f4efeb 25%, #c3b187 70%, #9d9167 100%)
-}
-
-.beranda-bg {
-  background: linear-gradient(#f4efeb 5%, #c3b187 40%, #9d9167 100%)
 }
 
 @keyframes slideIn {

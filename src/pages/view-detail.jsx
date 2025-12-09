@@ -33,11 +33,11 @@ function ViewDetail() {
         }
       } catch (err) {
         setError(err.message);
-        console.error("Unable to view detial artwork!", err);
+        console.error("Unable to view detail artwork!", err);
       }
     };
     fetchArtwork();
-  }, [id]);
+  }, [id, navigate]); 
 
   const handleDelete = async () => {
     setIsDeleteModalOpen(true);
@@ -46,10 +46,11 @@ function ViewDetail() {
   const confirmDelete = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`http://localhost:5000/api/artworks/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/artworks/${id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
+
       if (res.ok) {
         toastSuccess("Artwork succesfully deleted!");
         navigate("/gallery-walls");
@@ -204,4 +205,3 @@ function ViewDetail() {
 }
 
 export default ViewDetail;
-  

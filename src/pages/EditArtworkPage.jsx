@@ -14,7 +14,7 @@ function EditArtworkPage() {
     title: "",
     artist: "",
     year: "",
-    category: "",
+    category: "Painting", 
     description: "",
     image: "",
   });
@@ -40,7 +40,7 @@ function EditArtworkPage() {
             title: data.title || "",
             artist: data.artist || "",
             year: data.year ? data.year.split("T")[0] : "",
-            category: data.category || "",
+            category: data.category || "Painting", 
             description: data.description || "",
             image: data.image || "",
           });
@@ -89,7 +89,7 @@ function EditArtworkPage() {
     const { image, title, artist } = formData;
 
     if (!image || !title || !artist) {
-    toastError("Please ensure Image, Title, and Artist name are filled.");
+      toastError("Please ensure Image, Title, and Artist name are filled.");
       return;
     }
 
@@ -141,25 +141,19 @@ function EditArtworkPage() {
       placeholder: "",
       type: "date",
     },
-    {
-      label: "Category",
-      name: "category",
-      val: formData.category,
-      placeholder: "painting, photography, digital art, etc",
-      type: "text",
-    },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col font-montserrat">
-      <main className="flex-grow w-full px-16 py-8 beranda-bg">
-        <h1 className="text-4xl font-bold text-center mt-5 mb-15 text-[#442D1D]">
+    <div className="min-h-screen flex flex-col font-montserrat beranda-bg">
+      <main className="flex-grow w-full px-16 py-8">
+        <h1 className="text-4xl font-bold text-center mt-3 mb-15 text-[#442D1D]">
           Edit Artwork: {formData.title}
         </h1>
 
-        <div className="flex flex-row gap-12 h-[600px]">
+        <div className="flex flex-row gap-12 h-auto lg:min-h-[600px]">
+          {/* Upload Area */}
           <div
-            className="w-1/2 h-full rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
+            className="w-full lg:w-1/2 min-h-[400px] lg:h-auto rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
             onClick={() => fileInputRef.current.click()}
           >
             <input
@@ -189,9 +183,10 @@ function EditArtworkPage() {
             )}
           </div>
 
+          {/* Form Area */}
           <form
             onSubmit={handleSave}
-            className="w-1/2 flex flex-col justify-between font-medium text-[#442D1D]"
+            className="w-1/2 flex flex-col gap-4 font-medium text-[#442D1D]"
           >
             {inputFields.map((field, idx) => (
               <div key={idx} className="flex flex-col gap-2">
@@ -206,6 +201,26 @@ function EditArtworkPage() {
                 />
               </div>
             ))}
+
+            {/* kategori */}
+            <div className="flex flex-col gap-2">
+              <label className="text-lg font-bold">Category</label>
+              <select
+                name="category"
+                value={formData.category} 
+                onChange={handleChange}
+                className="w-full font-medium px-6 py-3 rounded-2xl outline-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent cursor-pointer appearance-none"
+              >
+                <option value="Painting">Painting</option>
+                <option value="Digital Art">Digital Art</option>
+                <option value="Photography">Photography</option>
+                <option value="Sketch">Sketch</option>
+                <option value="Abstract">Abstract</option>
+                <option value="Sculpture">Sculpture</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
             <div className="flex flex-col gap-2">
               <label className="text-lg font-bold">Description</label>
               <textarea
@@ -217,6 +232,7 @@ function EditArtworkPage() {
                 className="w-full font-medium px-6 py-3 rounded-2xl outline-none resize-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               />
             </div>
+
             <div className="flex justify-end gap-6 mt-4">
               <button
                 type="submit"

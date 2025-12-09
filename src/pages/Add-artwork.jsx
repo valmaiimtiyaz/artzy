@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toastSuccess, toastError } from "../components/ToastWithProgress";
 import uploadIconPlaceholder from "../assets/ep_upload-filled.svg";
 
@@ -10,7 +10,7 @@ function AddArtwork() {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [year, setYear] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("Painting");
   const [description, setDescription] = useState("");
   const fileInputRef = useRef(null);
 
@@ -65,41 +65,79 @@ function AddArtwork() {
       toastSuccess("Artwork saved successfully!");
       navigate("/gallery-walls");
     } catch (err) {
-      toastError(err.message); 
+      toastError(err.message);
     }
   };
 
   const inputFields = [
-    { label: "Title", val: title, set: setTitle, placeholder: "example: Girl with a Pearl Earring", type: "text" },
-    { label: "Artist Name", val: artist, set: setArtist, placeholder: "example: by Johannes Vermeer", type: "text" },
-    { label: "Year Created", val: year, set: setYear, placeholder: "", type: "date" },
-    { label: "Category", val: category, set: setCategory, placeholder: "painting, photography, digital art, etc", type: "text" },
+    {
+      label: "Title",
+      val: title,
+      set: setTitle,
+      placeholder: "example: Girl with a Pearl Earring",
+      type: "text",
+    },
+    {
+      label: "Artist Name",
+      val: artist,
+      set: setArtist,
+      placeholder: "example: by Johannes Vermeer",
+      type: "text",
+    },
+    {
+      label: "Year Created",
+      val: year,
+      set: setYear,
+      placeholder: "",
+      type: "date",
+    },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col font-montserrat">
-      <main className="flex-grow w-full px-16 py-8 beranda-bg">
-        <h1 className="text-4xl font-bold text-center mt-10 mb-15 text-[#442D1D]">
+    <div className="min-h-screen flex flex-col font-montserrat beranda-bg">
+      <main className="flex-grow w-full px-16 py-8">
+        <h1 className="text-4xl font-bold text-center mt-3 mb-15 text-[#442D1D]">
           Add to Your Collection
         </h1>
 
-        <div className="flex flex-row gap-12 h-[600px]">
+        <div className="flex flex-row gap-12 h-auto lg:min-h-[600px]">
+          {/* bagian up gambar */}
           <div
-            className="w-1/2 h-full rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
+            className="w-full lg:w-1/2 min-h-[400px] lg:h-auto rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
             onClick={() => fileInputRef.current.click()}
           >
-            <input type="file" ref={fileInputRef} onChange={handleImageChange} accept="image/*" className="hidden" />
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              className="hidden"
+            />
             {imagePreview ? (
-              <img src={imagePreview} alt="Preview" className="w-full h-full object-contain p-4" />
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="w-full h-full object-contain p-4"
+              />
             ) : (
               <>
-                <img src={uploadIconPlaceholder} alt="Upload Icon" className="w-24 h-24 mb-4 opacity-70 text-[#442D1D]" />
-                <p className="text-xl font-semibold text-[#442D1D]">Drag and Drop Image Files to Upload</p>
+                <img
+                  src={uploadIconPlaceholder}
+                  alt="Upload Icon"
+                  className="w-24 h-24 mb-4 opacity-70 text-[#442D1D]"
+                />
+                <p className="text-xl font-semibold text-[#442D1D]">
+                  Drag and Drop Image Files to Upload
+                </p>
               </>
             )}
           </div>
 
-          <form onSubmit={handleSave} className="w-1/2 flex flex-col justify-between font-medium text-[#442D1D]">
+          {/* bagian form */}
+          <form
+            onSubmit={handleSave}
+            className="w-1/2 flex flex-col gap-4 font-medium text-[#442D1D]"
+          >
             {inputFields.map((field, idx) => (
               <div key={idx} className="flex flex-col gap-2">
                 <label className="text-lg font-bold">{field.label}</label>
@@ -112,6 +150,25 @@ function AddArtwork() {
                 />
               </div>
             ))}
+
+            {/*dropdown kategori*/}
+            <div className="flex flex-col gap-2">
+              <label className="text-lg font-bold">Category</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full font-medium px-6 py-3 rounded-2xl outline-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent cursor-pointer appearance-none"
+              >
+                <option value="Painting">Painting</option>
+                <option value="Digital Art">Digital Art</option>
+                <option value="Photography">Photography</option>
+                <option value="Sketch">Sketch</option>
+                <option value="Abstract">Abstract</option>
+                <option value="Sculpture">Sculpture</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
             <div className="flex flex-col gap-2">
               <label className="text-lg font-bold">Description</label>
               <textarea
@@ -122,9 +179,21 @@ function AddArtwork() {
                 className="w-full font-medium px-6 py-3 rounded-2xl outline-none resize-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
               />
             </div>
-            <div className="flex justify-end gap-6 mt-4">
-              <button type="submit" className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer">Save Artwork</button>
-              <button type="button" onClick={() => navigate("/gallery-walls")} className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer">Cancel</button>
+
+            <div className="flex justify-end gap-6 mt-4 mb-5">
+              <button
+                type="submit"
+                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
+              >
+                Save Artwork
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate("/gallery-walls")}
+                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>

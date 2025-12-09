@@ -4,8 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 function GalleryWalls() {
   const navigate = useNavigate();
   const [artworks, setArtworks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const sliderRef = useRef(null);
-
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
@@ -16,6 +18,7 @@ function GalleryWalls() {
     }
 
     const fetchArtworks = async () => {
+      setIsLoading(true);
       try {
         const res = await fetch(`${API_BASE_URL}/api/artworks`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -25,11 +28,18 @@ function GalleryWalls() {
           setArtworks(data);
         }
       } catch (err) {
-        console.error("Gagal ambil artworks", err);
+        console.error("Failed to fetch artworks", err);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchArtworks();
   }, []);
+
+  const filteredArtworks =
+    selectedCategory === "All"
+      ? artworks
+      : artworks.filter((art) => art.category === selectedCategory);
 
   const scrollLeft = () => {
     if (sliderRef.current) {
@@ -43,9 +53,20 @@ function GalleryWalls() {
     }
   };
 
+  const categories = [
+    "All",
+    "Painting",
+    "Digital Art",
+    "Photography",
+    "Sketch",
+    "Abstract",
+    "Sculpture",
+    "Other",
+  ];
+
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
-      <header className="sticky top-0 z-10 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
+      <header className="sticky top-0 z-50 flex justify-between items-center px-10 py-6 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md">
         <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-8">
           Artzy
         </div>
@@ -78,21 +99,87 @@ function GalleryWalls() {
       </header>
 
       <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
-        <h1 className="text-4xl font-bold text-[#442D1D] text-center mt-10">
-          Gallery Walls
-        </h1>
+        <div className="relative flex justify-center items-center mt-10 px-10"> 
+          <h1 className="text-4xl font-bold text-[#442D1D]">Gallery Walls</h1>
 
-        {artworks.length === 0 ? (
-          <div className="flex-grow flex flex-col items-center justify-center text-center px-4 -mt-20">
-            <p className="text-2xl font-medium text-[#442D1D] mb-12 opacity-90">
-              looks a little empty here.. start your collection
-            </p>
+          <div className="absolute right-10 lg:right-20">
             <button
-              onClick={() => navigate("/add-artwork")}
-              className="bg-[#442D1D] text-[#F4EFEB] text-xl font-medium py-3 px-12 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="flex items-center gap-2 bg-[#442D1D] text-white px-4 py-2 rounded-full shadow hover:bg-[#5e3f2b] transition"
             >
-              + Add Artwork
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+                />
+              </svg>
+              <span className="text-sm font-medium">
+                {selectedCategory === "All" ? "Filter" : selectedCategory}
+              </span>
             </button>
+
+            {isFilterOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl z-50 border border-gray-200 overflow-hidden">
+                <div className="py-1">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setIsFilterOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-3 text-sm hover:bg-[#F4EFEB] transition ${
+                        selectedCategory === cat
+                          ? "font-bold text-[#442D1D] bg-[#F4EFEB]"
+                          : "text-gray-700"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        {isLoading ? (
+          <div className="flex-grow flex items-center justify-center w-full px-10">
+            <div className="flex gap-12 overflow-hidden w-full max-w-7xl items-center px-12">
+              {[1, 2, 3].map((item) => (
+                <div
+                  key={item}
+                  className="flex-none w-95 h-[400px] bg-[#E8D1A7]/50 rounded-xl animate-pulse flex flex-col items-center justify-center p-6 gap-4"
+                >
+                  <div className="w-full h-64 bg-[#442D1D]/10 rounded-md"></div>
+                  <div className="w-3/4 h-6 bg-[#442D1D]/10 rounded-full"></div>
+                  <div className="w-1/2 h-4 bg-[#442D1D]/10 rounded-full"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : filteredArtworks.length === 0 ? (
+          <div className="flex-grow flex flex-col items-center justify-center text-center px-4 -mt-10">
+            <p className="text-2xl font-medium text-[#442D1D] mb-8 opacity-90">
+              {artworks.length === 0
+                ? "looks a little empty here.. start your collection"
+                : `No artworks found in "${selectedCategory}" category.`}
+            </p>
+            {artworks.length === 0 && (
+              <button
+                onClick={() => navigate("/add-artwork")}
+                className="bg-[#442D1D] text-[#F4EFEB] text-xl font-medium py-3 px-12 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
+              >
+                + Add Artwork
+              </button>
+            )}
           </div>
         ) : (
           <div className="flex-grow flex items-center justify-center w-full px-10 relative pb-20">
@@ -121,14 +208,18 @@ function GalleryWalls() {
               className="flex gap-12 overflow-x-auto scroll-smooth px-12 py-10 no-scrollbar w-full max-w-7xl items-center"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
-              {artworks.map((art) => (
+              {filteredArtworks.map((art) => (
                 <div
-                  key={art.id}
-                  className="flex-none w-95 bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-105 transition-transform duration-300"
+                  key={art.id || art._id}
+                  className="flex-none w-95 bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-105 transition-transform duration-300 relative group"
                 >
+                  <div className="absolute top-4 right-4 bg-white/80 px-3 py-1 rounded-full text-xs font-bold text-[#442D1D] shadow-sm z-10">
+                    {art.category}
+                  </div>
+
                   <div className="h-80 overflow-hidden flex justify-center mt-8 px-6">
                     <img
-                      src={art.image}
+                      src={art.image || art.imageUrl}
                       alt={art.title}
                       className="w-full h-full object-cover rounded-md shadow-sm"
                     />
@@ -143,7 +234,7 @@ function GalleryWalls() {
                       </p>
                     </div>
                     <div
-                      onClick={() => navigate(`/artwork/${art.id}`)}
+                      onClick={() => navigate(`/artwork/${art.id || art._id}`)}
                       className="text-sm font-medium italic text-[#442D1D] hover:text-[#6c4e3e] cursor-pointer mb-2"
                     >
                       View Details
