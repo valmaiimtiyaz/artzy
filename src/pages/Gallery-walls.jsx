@@ -210,7 +210,6 @@ function GalleryWalls() {
           </h1>
 
           <div className="flex justify-end md:absolute md:right-10 md:top-1/2 md:-translate-y-1/2 w-full md:w-auto mt-4">
-
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="flex items-center gap-2 bg-[#442D1D] text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow hover:bg-[#5e3f2b] transition"
@@ -265,7 +264,7 @@ function GalleryWalls() {
               {[1].map((item) => (
                 <div
                   key={item}
-                  className="flex-none min-w-[90%] md:min-w-[30%] h-[350px] md:h-[400px] bg-[#E8D1A7]/50 rounded-xl animate-pulse flex flex-col items-center justify-center p-6 gap-4"
+                  className="flex-none min-w-[90vw] md:min-w-[30%] h-[350px] md:h-[400px] bg-[#E8D1A7]/50 rounded-xl animate-pulse flex flex-col items-center justify-center p-6 gap-4"
                 >
                   <div className="w-full h-48 bg-[#442D1D]/10 rounded-md"></div>
                   <div className="w-3/4 h-6 bg-[#442D1D]/10 rounded-full"></div>
@@ -310,7 +309,6 @@ function GalleryWalls() {
                 />
               </svg>
             </button>
-
             <div
               ref={sliderRef}
               className="flex gap-4 md:gap-12 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 md:px-12 py-8 md:py-10 no-scrollbar w-full max-w-7xl items-center"
@@ -319,14 +317,14 @@ function GalleryWalls() {
               {filteredArtworks.map((art) => (
                 <div
                   key={art.id || art._id}
-                  className="flex-none min-w-full md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.5rem)] snap-center bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-[1.02] transition-transform duration-300 relative group cursor-pointer"
+                  className="flex-none min-w-[90vw] md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.5rem)] snap-center bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-[1.02] transition-transform duration-300 relative group cursor-pointer"
                   onClick={() => navigate(`/artwork/${art.id || art._id}`)}
                 >
                   <div className="absolute top-4 right-4 bg-white/80 px-3 py-1 rounded-full text-xs font-bold text-[#442D1D] shadow-sm z-10">
                     {art.category}
                   </div>
 
-                  <div className="h-56 md:h-80 overflow-hidden flex justify-center mt-6 md:mt-8 px-4 md:px-6">
+                  <div className="h-64 md:h-80 overflow-hidden flex justify-center mt-6 md:mt-8 px-4 md:px-6">
                     <img
                       src={art.image || art.imageUrl}
                       alt={art.title}
