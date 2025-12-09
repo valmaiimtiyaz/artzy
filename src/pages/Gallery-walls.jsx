@@ -7,7 +7,8 @@ function GalleryWalls() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const sliderRef = useRef(null);
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
@@ -208,7 +209,8 @@ function GalleryWalls() {
             Gallery Walls
           </h1>
 
-          <div className="flex justify-end md:absolute md:right-10 md:top-1/2 md:-translate-y-1/2 w-full md:w-auto mb-[-30px] mt-8">
+          <div className="flex justify-end md:absolute md:right-10 md:top-1/2 md:-translate-y-1/2 w-full md:w-auto mt-4">
+
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="flex items-center gap-2 bg-[#442D1D] text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow hover:bg-[#5e3f2b] transition"
@@ -288,7 +290,7 @@ function GalleryWalls() {
             )}
           </div>
         ) : (
-          <div className="flex-grow flex items-center justify-center w-full px-0 md:px-10 relative pb-10">
+          <div className="flex-grow flex items-center justify-center w-full px-0 md:px-10 relative pb-10 mt-[-2rem] md:mt-0">
             <button
               onClick={scrollLeft}
               className="absolute left-4 md:left-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"

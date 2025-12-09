@@ -100,7 +100,6 @@ function Beranda() {
               </Link>
             </nav>
 
-            {/* Burger Button*/}
             <div className="md:hidden ml-2">
               {" "}
               <button
@@ -177,7 +176,7 @@ function Beranda() {
       </header>
 
       <main className="flex-grow flex flex-col items-center justify-center text-center w-full beranda-bg px-4 py-16 md:py-32">
-        <h1 className="text-4xl md:text-[70px] font-extrabold text-[#442D1D] mb-2 tracking-tight leading-tight">
+        <h1 className="text-3xl md:text-[70px] font-extrabold text-[#442D1D] mb-2 tracking-tight leading-tight">
           Welcome back, {username} !
         </h1>
 
