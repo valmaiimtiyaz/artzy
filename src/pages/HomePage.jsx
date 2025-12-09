@@ -13,7 +13,7 @@ function HomePage() {
     <div className="bg-[#F4EFEB] min-h-screen flex flex-col scroll-smooth">
       <header className="sticky top-0 z-50 bg-[#F4EFEB] shadow-md w-full border-b border-gray-300">
         <div className="max-w-7xl mx-auto px-3 py-5 flex justify-between items-center">
-          <div className="text-3xl md:text-4xl font-extrabold text-[#442D1D] font-montserrat">
+          <div className="text-[25px] md:text-4xl font-extrabold text-[#442D1D] font-montserrat">
             Artzy
           </div>
           <nav className="hidden md:flex items-center font-medium text-[#442D1D] text-lg font-montserrat gap-7">
@@ -86,28 +86,28 @@ function HomePage() {
             <a
               href="#about"
               onClick={() => setIsOpen(false)}
-              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-lg font-medium active:scale-95 transition-all duration-200"
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
             >
               About
             </a>
             <a
               href="#gallery"
               onClick={() => setIsOpen(false)}
-              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-lg font-medium active:scale-95 transition-all duration-200"
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
             >
               Gallery
             </a>
             <a
               href="#howitworks"
               onClick={() => setIsOpen(false)}
-              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-lg font-medium active:scale-95 transition-all duration-200"
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
             >
               How It Works
             </a>
             <Link
               to="/login"
               onClick={() => setIsOpen(false)}
-              className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-lg font-bold active:scale-95 transition-all duration-200"
+              className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-sm font-bold active:scale-95 transition-all duration-200"
             >
               Login
             </Link>

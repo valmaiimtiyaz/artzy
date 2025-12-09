@@ -14,7 +14,7 @@ function EditArtworkPage() {
     title: "",
     artist: "",
     year: "",
-    category: "Painting", 
+    category: "Painting",
     description: "",
     image: "",
   });
@@ -40,7 +40,7 @@ function EditArtworkPage() {
             title: data.title || "",
             artist: data.artist || "",
             year: data.year ? data.year.split("T")[0] : "",
-            category: data.category || "Painting", 
+            category: data.category || "Painting",
             description: data.description || "",
             image: data.image || "",
           });
@@ -145,15 +145,14 @@ function EditArtworkPage() {
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat beranda-bg">
-      <main className="flex-grow w-full px-16 py-8">
-        <h1 className="text-4xl font-bold text-center mt-3 mb-15 text-[#442D1D]">
+      <main className="flex-grow w-full px-4 py-6 md:px-16 md:py-8">
+        <h1 className="text-2xl md:text-4xl font-bold text-center mt-3 mb-8 md:mb-15 text-[#442D1D]">
           Edit Artwork: {formData.title}
         </h1>
 
-        <div className="flex flex-row gap-12 h-auto lg:min-h-[600px]">
-          {/* Upload Area */}
+        <div className="flex flex-col md:flex-row gap-8 md:gap-12 h-auto max-w-7xl mx-auto">
           <div
-            className="w-full lg:w-1/2 min-h-[400px] lg:h-auto rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
+            className="w-full md:w-1/2 min-h-[300px] md:min-h-[400px] lg:h-auto rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
             onClick={() => fileInputRef.current.click()}
           >
             <input
@@ -174,42 +173,42 @@ function EditArtworkPage() {
                 <img
                   src={uploadIconPlaceholder}
                   alt="Upload Icon"
-                  className="w-24 h-24 mb-4 opacity-70 text-[#442D1D]"
+                  className="w-16 h-16 mb-2 opacity-70 text-[#442D1D] md:w-24 md:h-24 md:mb-4"
                 />
-                <p className="text-xl font-semibold text-[#442D1D]">
+                <p className="text-base font-semibold text-[#442D1D] md:text-xl">
                   Click to Change Image
                 </p>
               </>
             )}
           </div>
 
-          {/* Form Area */}
           <form
             onSubmit={handleSave}
-            className="w-1/2 flex flex-col gap-4 font-medium text-[#442D1D]"
+            className="w-full md:w-1/2 flex flex-col gap-4 font-medium text-[#442D1D]"
           >
             {inputFields.map((field, idx) => (
-              <div key={idx} className="flex flex-col gap-2">
-                <label className="text-lg font-bold">{field.label}</label>
+              <div key={idx} className="flex flex-col gap-1 md:gap-2">
+                <label className="text-base md:text-lg font-bold">
+                  {field.label}
+                </label>
                 <input
                   type={field.type}
                   name={field.name}
                   value={field.val}
                   onChange={handleChange}
                   placeholder={field.placeholder}
-                  className="w-full font-medium px-6 py-3 rounded-2xl outline-none placeholder-[#442D1D]/50 text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+                  className="w-full font-medium px-4 py-2 md:px-6 md:py-3 rounded-2xl outline-none placeholder-[#442D1D]/50 text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent text-sm md:text-base"
                 />
               </div>
             ))}
 
-            {/* kategori */}
-            <div className="flex flex-col gap-2">
-              <label className="text-lg font-bold">Category</label>
+            <div className="flex flex-col gap-1 md:gap-2">
+              <label className="text-base md:text-lg font-bold">Category</label>
               <select
                 name="category"
-                value={formData.category} 
+                value={formData.category}
                 onChange={handleChange}
-                className="w-full font-medium px-6 py-3 rounded-2xl outline-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent cursor-pointer appearance-none"
+                className="w-full font-medium px-4 py-2 md:px-6 md:py-3 rounded-2xl outline-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent cursor-pointer appearance-none text-sm md:text-base"
               >
                 <option value="Painting">Painting</option>
                 <option value="Digital Art">Digital Art</option>
@@ -221,29 +220,31 @@ function EditArtworkPage() {
               </select>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="text-lg font-bold">Description</label>
+            <div className="flex flex-col gap-1 md:gap-2">
+              <label className="text-base md:text-lg font-bold">
+                Description
+              </label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="optional"
                 rows="4"
-                className="w-full font-medium px-6 py-3 rounded-2xl outline-none resize-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent"
+                className="w-full font-medium px-4 py-2 md:px-6 md:py-3 rounded-2xl outline-none resize-none text-[#442D1D] transition-all duration-200 backdrop-blur-XL bg-[#442D1D]/15 border border-white/20 focus:ring-2 focus:ring-[#442D1D] focus:bg-transparent text-sm md:text-base"
               />
             </div>
 
-            <div className="flex justify-end gap-6 mt-4">
+            <div className="flex justify-center md:justify-end gap-4 md:gap-6 mt-4">
               <button
                 type="submit"
-                className="px-10 py-3 rounded-full text-[#442D1D] font-medium text-lg hover:scale-105 transition bg-[#f4efeb] cursor-pointer"
+                className="px-6 py-2 rounded-full text-white font-medium text-base md:text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
               >
                 Save Changes
               </button>
               <button
                 type="button"
                 onClick={() => navigate(`/artwork/${id}`)}
-                className="px-10 py-3 rounded-full text-white font-medium text-lg hover:scale-105 transition bg-[#442D1D] cursor-pointer"
+                className="px-6 py-2 rounded-full text-[#442D1D] font-medium text-base md:text-lg hover:scale-105 transition bg-[#F4EFEB] cursor-pointer"
               >
                 Cancel
               </button>

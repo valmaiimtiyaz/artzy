@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { Edit3 } from "lucide-react";
 import { toastSuccess, toastError } from "../components/ToastWithProgress";
 import ConfirmModal from "../components/ConfirmModal";
-import { jwtDecode } from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
 
 function ViewDetail() {
   const { id } = useParams();
@@ -11,7 +11,7 @@ function ViewDetail() {
   const [artwork, setArtwork] = useState(null);
   const [error, setError] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState(null); 
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
@@ -74,7 +74,7 @@ function ViewDetail() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F4EFEB] text-[#bfa28e]">
+      <div className="min-h-screen flex items-center justify-center bg-[#F4EFEB] text-[#bfa28e] font-montserrat">
         {error} - Try refreshing!
       </div>
     );
@@ -82,7 +82,7 @@ function ViewDetail() {
 
   if (!artwork)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F4EFEB] text-[#442D1D]">
+      <div className="min-h-screen flex items-center justify-center bg-[#F4EFEB] text-[#442D1D] font-montserrat">
         Loading...
       </div>
     );
@@ -91,11 +91,12 @@ function ViewDetail() {
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
-      <main className="flex-grow w-full px-8 py-12 gallery-gradient-bg flex flex-col items-center justify-center">
-        <div className="w-full max-w-6xl relative flex items-center justify-center mb-8">
+      <main className="flex-grow w-full px-4 py-6 md:px-8 md:py-12 gallery-gradient-bg flex flex-col items-center justify-center">
+        {/* BACK BUTTON CONTAINER */}
+        <div className="w-full max-w-4xl relative flex items-center justify-start mb-4 md:mb-8 mx-auto">
           <button
-            onClick={() => navigate(-1)} 
-            className="absolute left-0 p-3 text-[#442D1D] hover:bg-[#442D1D]/10 rounded-full transition"
+            onClick={() => navigate(-1)}
+            className="p-2 text-[#442D1D] hover:bg-[#442D1D]/10 rounded-full transition"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +104,7 @@ function ViewDetail() {
               viewBox="0 0 24 24"
               strokeWidth={3.0}
               stroke="currentColor"
-              className="w-6 h-6"
+              className="w-5 h-5 md:w-6 md:h-6"
             >
               <path
                 strokeLinecap="round"
@@ -114,31 +115,31 @@ function ViewDetail() {
           </button>
         </div>
 
-        <div className="bg-[#E8D1A7] rounded-[15px] p-8 md:p-12 shadow-2xl flex flex-col md:flex-row gap-10 w-full max-w-4xl items-stretch min-h-[450px]">
-          <div className="w-full md:w-1/2 flex items-center justify-center rounded-3xl p-6">
-            <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white/40 w-full max-h-[600px]">
+        <div className="bg-[#E8D1A7] rounded-[15px] p-6 md:p-12 shadow-2xl flex flex-col md:flex-row gap-6 md:gap-10 w-full max-w-4xl items-stretch">
+          <div className="w-full md:w-1/2 flex items-center justify-center rounded-2xl p-2 md:p-6">
+            <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-white/40 w-full max-h-[500px]">
               <img
-                src={artwork.image || artwork.imageUrl} 
+                src={artwork.image || artwork.imageUrl}
                 alt={artwork.title}
-                className="w-full h-full object-contain "
+                className="w-full h-full object-contain"
               />
             </div>
           </div>
 
           <div className="w-full md:w-1/2 flex flex-col justify-center text-[#442D1D]">
-            <div className="border-b border-[#442D1D]/20 pb-4 mb-4">
-              <h2 className="text-4xl md:text-4xl font-bold leading-tight mb-1">
+            <div className="border-b border-[#442D1D]/20 pb-3 mb-3 md:pb-4 md:mb-4">
+              <h2 className="text-2xl md:text-4xl font-bold leading-tight mb-1">
                 {artwork.title}
               </h2>
-              <p className="text-xl italic opacity-80">by {artwork.artist}</p>
+              <p className="text-base italic opacity-80">by {artwork.artist}</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 mb-6">
               <div>
                 <span className="block text-xs font-bold uppercase tracking-widest opacity-60 mb-1">
                   Year Created
                 </span>
-                <p className="text-lg font-semibold">
+                <p className="text-sm md:text-lg font-semibold">
                   {artwork.year
                     ? new Date(artwork.year).toLocaleDateString("en-GB", {
                         day: "numeric",
@@ -152,7 +153,7 @@ function ViewDetail() {
                 <span className="block text-xs font-bold uppercase tracking-widest opacity-60 mb-1">
                   Category
                 </span>
-                <p className="text-lg font-semibold capitalize">
+                <p className="text-sm md:text-lg font-semibold capitalize">
                   {artwork.category}
                 </p>
               </div>
@@ -162,7 +163,7 @@ function ViewDetail() {
               <span className="block text-xs font-bold uppercase tracking-widest opacity-60 mb-2">
                 Description
               </span>
-              <p className="text-base leading-relaxed opacity-90">
+              <p className="text-sm md:text-base leading-relaxed opacity-90">
                 {artwork.description || "No description provided."}
               </p>
             </div>
@@ -172,7 +173,7 @@ function ViewDetail() {
                 <div className="flex justify-between items-center">
                   <button
                     onClick={() => navigate(`/edit-artwork/${artwork.id}`)}
-                    className="group flex items-center gap-3 text-[#442D1D] font-bold text-base hover:text-[#2c1d13] transition w-fit cursor-pointer"
+                    className="group flex items-center gap-2 md:gap-3 text-[#442D1D] font-bold text-sm md:text-base hover:text-[#2c1d13] transition w-fit cursor-pointer"
                   >
                     <div className="p-2 bg-[#442D1D]/10 rounded-full group-hover:bg-[#442D1D]/20 transition">
                       <Edit3 className="w-4 h-4" />
@@ -181,7 +182,7 @@ function ViewDetail() {
                   </button>
                   <button
                     onClick={handleDelete}
-                    className="group flex items-center gap-3 text-red-800 font-bold text-base hover:text-red-600 transition w-fit cursor-pointer"
+                    className="group flex items-center gap-2 md:gap-3 text-red-800 font-bold text-sm md:text-base hover:text-red-600 transition w-fit cursor-pointer"
                   >
                     <div className="p-2 bg-red-800/10 rounded-full group-hover:bg-red-800/20 transition">
                       <svg
@@ -204,10 +205,10 @@ function ViewDetail() {
                 </div>
               ) : (
                 <div
-                  className="flex items-center gap-4 cursor-pointer hover:bg-[#442D1D]/5 p-2 rounded-xl transition"
-                  onClick={() => navigate(`/user/${artwork.artist_username}`)} 
+                  className="flex items-center gap-2 md:gap-4 cursor-pointer hover:bg-[#442D1D]/5 p-2 rounded-xl transition"
+                  onClick={() => navigate(`/user/${artwork.artist_username}`)}
                 >
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#442D1D] shadow-sm flex-shrink-0">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-[#442D1D] shadow-sm flex-shrink-0">
                     {artwork.artist_profile_pic ? (
                       <img
                         src={artwork.artist_profile_pic}
@@ -215,7 +216,7 @@ function ViewDetail() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-[#442D1D] flex items-center justify-center text-[#E8D1A7] font-bold text-lg">
+                      <div className="w-full h-full bg-[#442D1D] flex items-center justify-center text-[#E8D1A7] font-bold text-sm md:text-lg">
                         {artwork.artist_username
                           ? artwork.artist_username.charAt(0).toUpperCase()
                           : "?"}
@@ -226,7 +227,7 @@ function ViewDetail() {
                     <p className="text-xs font-bold uppercase tracking-widest opacity-60">
                       Posted by
                     </p>
-                    <p className="text-lg font-bold text-[#442D1D]">
+                    <p className="text-sm md:text-lg font-bold text-[#442D1D]">
                       @{artwork.artist_username || "Unknown"}
                     </p>
                   </div>

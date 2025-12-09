@@ -2,19 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 
 function PublicProfile() {
-  const { username } = useParams(); 
+  const { username } = useParams();
   const navigate = useNavigate();
   const [artworks, setArtworks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
   const [userFound, setUserFound] = useState(true);
 
   const sliderRef = useRef(null);
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
 
     const fetchUserArtworks = async () => {
       setIsLoading(true);
@@ -110,131 +111,215 @@ function PublicProfile() {
     "Other",
   ];
 
+  if (!userFound) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F4EFEB] font-montserrat">
+        <div className="flex-grow flex flex-col items-center justify-center text-center px-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] capitalize mb-4">
+            User Not Found
+          </h1>
+          <p className="text-lg font-medium text-[#442D1D] opacity-90 mb-8">
+            Oops! We couldn't find user "{username}".
+          </p>
+          <Link to="/beranda" className="mt-4 underline text-[#442D1D]">
+            Search Again
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
-      <header className="sticky top-0 z-50 flex justify-between items-center px-10 py-5 border-b border-gray-300 w-full bg-[#F4EFEB] shadow-md gap-4">
-        <div className="text-4xl font-extrabold text-[#442D1D] font-montserrat px-4">
-          Artzy
-        </div>
-        <nav className="flex items-center font-medium text-[#442D1D] text-lg font-montserrat gap-6">
-          <Link
-            to="/beranda"
-            className="hover:text-amber-700 transition duration-150"
-          >
-            Home
-          </Link>
-          <Link
-            to="/gallery-walls"
-            className="hover:text-amber-700 transition duration-150"
-          >
-            Gallery Walls
-          </Link>
-          <Link
-            to="/add-artwork"
-            className="hover:text-amber-700 transition duration-150"
-          >
-            Add Artwork
-          </Link>
-          <Link
-            to="/profile"
-            className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
-          >
-            Profile
-          </Link>
-        </nav>
-      </header>
+      <header className="sticky top-0 z-50 bg-[#F4EFEB] shadow-md w-full border-b border-gray-300">
+        <div className="max-w-full mx-auto flex justify-between items-center px-4 md:px-6 py-3 md:py-5">
+          <div className="text-[25px] md:text-4xl font-extrabold text-[#442D1D] font-montserrat">
+            Artzy
+          </div>
 
-      <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
-        <div className="relative flex justify-center items-center mt-10 px-10">
-          <h1 className="text-4xl font-bold text-[#442D1D] capitalize">
-            {userFound ? `${username}'s Walls` : "User Not Found"}
-          </h1>
+          <nav className="hidden md:flex items-center font-medium text-[#442D1D] text-lg font-montserrat gap-6">
+            <Link
+              to="/beranda"
+              className="hover:text-amber-700 transition duration-150"
+            >
+              Home
+            </Link>
+            <Link
+              to="/gallery-walls"
+              className="hover:text-amber-700 transition duration-150"
+            >
+              Gallery Walls
+            </Link>
+            <Link
+              to="/add-artwork"
+              className="hover:text-amber-700 transition duration-150"
+            >
+              Add Artwork
+            </Link>
+            <Link
+              to="/profile"
+              className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
+            >
+              Profile
+            </Link>
+          </nav>
 
-          {userFound && (
-            <div className="absolute right-10 lg:right-20">
-              <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="flex items-center gap-2 bg-[#442D1D] text-white px-4 py-2 rounded-full shadow hover:bg-[#5e3f2b] transition"
-              >
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-[#442D1D] focus:outline-none"
+            >
+              {isMenuOpen ? (
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-7 h-7"
                   fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
                   />
                 </svg>
-                <span className="text-sm font-medium">
-                  {selectedCategory === "All" ? "Filter" : selectedCategory}
-                </span>
-              </button>
-              {isFilterOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl z-50 border border-gray-200 overflow-hidden">
-                  <div className="py-1">
-                    {categories.map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => {
-                          setSelectedCategory(cat);
-                          setIsFilterOpen(false);
-                        }}
-                        className={`block w-full text-left px-4 py-3 text-sm hover:bg-[#F4EFEB] transition ${
-                          selectedCategory === cat
-                            ? "font-bold text-[#442D1D] bg-[#F4EFEB]"
-                            : "text-gray-700"
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+              ) : (
+                <svg
+                  className="w-7 h-7"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
               )}
-            </div>
-          )}
+            </button>
+          </div>
         </div>
 
-        {!userFound ? (
-          <div className="flex-grow flex flex-col items-center justify-center text-center px-4 -mt-10">
-            <p className="text-2xl font-medium text-[#442D1D] opacity-90">
-              Oops! We couldn't find user "{username}".
-            </p>
-            <Link to="/beranda" className="mt-4 underline text-[#442D1D]">
-              Search Again
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 w-full bg-[#F4EFEB] shadow-lg flex flex-col px-6 py-4 space-y-3 animate-fadeIn z-40">
+            <Link
+              to="/beranda"
+              onClick={() => setIsMenuOpen(false)}
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
+            >
+              Home
+            </Link>
+            <Link
+              to="/gallery-walls"
+              onClick={() => setIsMenuOpen(false)}
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
+            >
+              Gallery Walls
+            </Link>
+            <Link
+              to="/add-artwork"
+              onClick={() => setIsMenuOpen(false)}
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
+            >
+              Add Artwork
+            </Link>
+            <Link
+              to="/profile"
+              onClick={() => setIsMenuOpen(false)}
+              className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
+            >
+              Profile
             </Link>
           </div>
-        ) : isLoading ? (
-          <div className="flex-grow flex items-center justify-center w-full px-10">
-            <div className="flex gap-12 overflow-hidden w-full max-w-7xl items-center px-12">
-              {[1, 2, 3].map((item) => (
+        )}
+      </header>
+
+      <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
+        <div className="relative mt-6 md:mt-10 px-4 md:px-10 py-4 max-w-7xl mx-auto w-full">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] text-center mb-4 md:mb-0 capitalize">
+            {isLoading ? (
+              <div className="h-8 w-48 bg-[#442D1D]/10 mx-auto rounded-full animate-pulse"></div>
+            ) : (
+              `${username}'s Walls`
+            )}
+          </h1>
+
+          <div className="flex justify-end md:absolute md:right-10 md:top-1/2 md:-translate-y-1/2 w-full md:w-auto  mb-[-30px] mt-8">
+            <button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="flex items-center gap-2 bg-[#442D1D] text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow hover:bg-[#5e3f2b] transition"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-4 h-4 md:w-5 md:h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+                />
+              </svg>
+              <span className="text-xs md:text-sm font-medium">
+                {selectedCategory === "All" ? "Filter" : selectedCategory}
+              </span>
+            </button>
+
+            {isFilterOpen && (
+              <div className="absolute top-full mt-2 w-40 md:w-48 bg-white rounded-xl shadow-xl z-50 border border-gray-200 overflow-hidden right-0">
+                <div className="py-1">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => {
+                        setSelectedCategory(cat);
+                        setIsFilterOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 text-sm hover:bg-[#F4EFEB] transition ${
+                        selectedCategory === cat
+                          ? "font-bold text-[#442D1D] bg-[#F4EFEB]"
+                          : "text-gray-700"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="flex-grow flex items-center justify-center w-full px-4 md:px-10">
+            <div className="flex gap-4 md:gap-12 overflow-hidden w-full max-w-7xl items-center justify-center">
+              {[1].map((item) => (
                 <div
                   key={item}
-                  className="flex-none w-95 h-[400px] bg-[#E8D1A7]/50 rounded-xl animate-pulse flex flex-col items-center justify-center p-6 gap-4"
+                  className="flex-none min-w-[90%] md:min-w-[30%] h-[350px] md:h-[400px] bg-[#E8D1A7]/50 rounded-xl animate-pulse flex flex-col items-center justify-center p-6 gap-4"
                 >
-                  <div className="w-full h-64 bg-[#442D1D]/10 rounded-md"></div>
+                  <div className="w-full h-48 bg-[#442D1D]/10 rounded-md"></div>
                   <div className="w-3/4 h-6 bg-[#442D1D]/10 rounded-full"></div>
-                  <div className="w-1/2 h-4 bg-[#442D1D]/10 rounded-full"></div>
                 </div>
               ))}
             </div>
           </div>
         ) : filteredArtworks.length === 0 ? (
           <div className="flex-grow flex flex-col items-center justify-center text-center px-4 -mt-10">
-            <p className="text-2xl font-medium text-[#442D1D] mb-8 opacity-90">
+            <p className="text-lg md:text-2xl font-medium text-[#442D1D] mb-8 opacity-90">
               looks a little empty here.. this user hasn't posted yet.
             </p>
           </div>
         ) : (
-          <div className="flex-grow flex items-center justify-center w-full px-10 relative pb-20">
+          <div className="flex-grow flex items-center justify-center w-full px-0 md:px-10 relative pb-10">
             <button
               onClick={scrollLeft}
-              className="absolute left-10 z-20 p-2 rounded-full hover:bg-[#442D1D]/10 transition cursor-pointer"
+              className="absolute left-4 md:left-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -242,32 +327,32 @@ function PublicProfile() {
                 viewBox="0 0 24 24"
                 strokeWidth={2.5}
                 stroke="#442D1D"
-                className="w-10 h-10"
+                className="w-6 h-6 md:w-8 md:h-8"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M15.75 19.5 8.25 12l7.5-7.5"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
                 />
               </svg>
             </button>
 
             <div
               ref={sliderRef}
-              className="flex gap-12 overflow-x-auto scroll-smooth px-12 py-10 no-scrollbar w-full max-w-7xl items-center"
+              className="flex gap-4 md:gap-12 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 md:px-12 py-8 md:py-10 no-scrollbar w-full max-w-7xl items-center"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {filteredArtworks.map((art) => (
                 <div
-                  key={art.id}
-                  className="flex-none w-95 bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-105 transition-transform duration-300 relative group cursor-pointer"
-                  onClick={() => navigate(`/artwork/${art.id}`)}
+                  key={art.id || art._id}
+                  className="flex-none min-w-full md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.5rem)] snap-center bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-[1.02] transition-transform duration-300 relative group cursor-pointer"
+                  onClick={() => navigate(`/artwork/${art.id || art._id}`)}
                 >
                   <div className="absolute top-4 right-4 bg-white/80 px-3 py-1 rounded-full text-xs font-bold text-[#442D1D] shadow-sm z-10">
                     {art.category}
                   </div>
 
-                  <div className="h-80 overflow-hidden flex justify-center mt-8 px-6">
+                  <div className="h-56 md:h-80 overflow-hidden flex justify-center mt-6 md:mt-8 px-4 md:px-6">
                     <img
                       src={art.image || art.imageUrl}
                       alt={art.title}
@@ -275,12 +360,12 @@ function PublicProfile() {
                     />
                   </div>
 
-                  <div className="p-6 flex flex-col justify-between flex-grow mt-[-0.5rem]">
-                    <div className="mb-4">
-                      <p className="text-xl font-bold text-[#442D1D] mb-1 leading-tight">
+                  <div className="p-4 md:p-6 flex flex-col justify-between flex-grow mt-[-0.5rem]">
+                    <div className="mb-3 md:mb-4">
+                      <p className="text-lg md:text-xl font-bold text-[#442D1D] mb-1 leading-tight">
                         {art.title}
                       </p>
-                      <p className="text-base font-medium text-[#442D1D]">
+                      <p className="text-sm md:text-base font-medium text-[#442D1D]">
                         by {art.artist}
                       </p>
                     </div>
@@ -296,7 +381,7 @@ function PublicProfile() {
                           viewBox="0 0 24 24"
                           strokeWidth={1.5}
                           stroke={art.is_liked ? "#DC2626" : "#442D1D"}
-                          className="w-6 h-6 transition transform group-active/like:scale-125"
+                          className="w-5 h-5 transition transform group-active/like:scale-125"
                         >
                           <path
                             strokeLinecap="round"
@@ -309,7 +394,7 @@ function PublicProfile() {
                         </span>
                       </button>
 
-                      <div className="text-sm font-medium italic text-[#442D1D] hover:text-[#6c4e3e]">
+                      <div className="text-xs md:text-sm font-medium italic text-[#442D1D] hover:text-[#6c4e3e]">
                         View Details →
                       </div>
                     </div>
@@ -320,7 +405,7 @@ function PublicProfile() {
 
             <button
               onClick={scrollRight}
-              className="absolute right-10 z-20 p-2 rounded-full hover:bg-[#442D1D]/10 transition cursor-pointer"
+              className="absolute right-4 md:right-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -328,7 +413,7 @@ function PublicProfile() {
                 viewBox="0 0 24 24"
                 strokeWidth={2.5}
                 stroke="#442D1D"
-                className="w-10 h-10"
+                className="w-6 h-6 md:w-8 md:h-8"
               >
                 <path
                   strokeLinecap="round"
@@ -339,6 +424,12 @@ function PublicProfile() {
             </button>
           </div>
         )}
+
+        <style>{`
+          .no-scrollbar::-webkit-scrollbar {
+              display: none;
+          }
+        `}</style>
       </main>
     </div>
   );
