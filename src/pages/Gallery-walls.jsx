@@ -98,9 +98,10 @@ function GalleryWalls() {
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
+      {/* HEADER / NAVBAR (Responsive dengan Burger) */}
       <header className="sticky top-0 z-50 bg-[#F4EFEB] shadow-md w-full border-b border-gray-300">
         <div className="max-w-full mx-auto flex justify-between items-center px-4 md:px-6 py-3 md:py-5">
-          <div className="text-[25px] md:text-4xl font-extrabold text-[#442D1D] font-montserrat">
+          <div className="text-3xl md:text-4xl font-extrabold text-[#442D1D] font-montserrat">
             Artzy
           </div>
 
@@ -169,47 +170,52 @@ function GalleryWalls() {
           </div>
         </div>
 
+        {/* MOBILE DROPDOWN MENU */}
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 w-full bg-[#F4EFEB] shadow-lg flex flex-col px-6 py-4 space-y-3 animate-fadeIn z-40">
             <Link
               to="/beranda"
               onClick={() => setIsMenuOpen(false)}
-              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-lg font-medium active:scale-95 transition-all duration-200"
             >
               Home
             </Link>
             <Link
               to="/gallery-walls"
               onClick={() => setIsMenuOpen(false)}
-              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-lg font-medium active:scale-95 transition-all duration-200"
             >
               Gallery Walls
             </Link>
             <Link
               to="/add-artwork"
               onClick={() => setIsMenuOpen(false)}
-              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
+              className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-lg font-medium active:scale-95 transition-all duration-200"
             >
               Add Artwork
             </Link>
             <Link
               to="/profile"
               onClick={() => setIsMenuOpen(false)}
-              className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
+              className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-lg font-bold active:scale-95 transition-all duration-200 mt-2"
             >
               Profile
             </Link>
           </div>
         )}
       </header>
+      {/* ------------------------------------------------------------------------ */}
 
       <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
-        <div className="relative mt-6 md:mt-10 px-4 md:px-10 py-4 max-w-7xl mx-auto w-full">
+        {/* JUDUL & FILTER CONTAINER */}
+        <div className="relative mt-6 md:mt-10 px-4 md:px-10 pt-4 pb-0 md:py-4 max-w-7xl mx-auto w-full">
           <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] text-center mb-4 md:mb-0">
             Gallery Walls
           </h1>
 
-          <div className="flex justify-end md:absolute md:right-10 md:top-1/2 md:-translate-y-1/2 w-full md:w-auto mt-4">
+          {/* FILTER BUTTON & DROPDOWN (Rata Kanan di HP) */}
+          <div className="flex justify-end md:absolute md:right-10 md:top-1/2 md:-translate-y-1/2 w-full md:w-auto mt-4 px-4">
+            {/* px-4: Padding untuk kontainer filter agar tidak menempel di sisi layar HP */}
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="flex items-center gap-2 bg-[#442D1D] text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full shadow hover:bg-[#5e3f2b] transition"
@@ -258,13 +264,15 @@ function GalleryWalls() {
           </div>
         </div>
 
+        {/* LOADING & EMPTY STATES */}
         {isLoading ? (
-          <div className="flex-grow flex items-center justify-center w-full px-4 md:px-10">
+          <div className="flex-grow flex items-center justify-center w-full px-4 md:px-10 mt-[-1rem] md:mt-0">
+            {/* mt-[-1rem]: Mengurangi jarak dari Filter di HP */}
             <div className="flex gap-6 overflow-hidden w-full max-w-7xl items-center">
               {[1].map((item) => (
                 <div
                   key={item}
-                  className="flex-none min-w-[90vw] md:min-w-[30%] h-[350px] md:h-[400px] bg-[#E8D1A7]/50 rounded-xl animate-pulse flex flex-col items-center justify-center p-6 gap-4"
+                  className="flex-none min-w-[90vw] h-[350px] md:h-[400px] bg-[#E8D1A7]/50 rounded-xl animate-pulse flex flex-col items-center justify-center p-6 gap-4"
                 >
                   <div className="w-full h-48 bg-[#442D1D]/10 rounded-md"></div>
                   <div className="w-3/4 h-6 bg-[#442D1D]/10 rounded-full"></div>
@@ -289,10 +297,13 @@ function GalleryWalls() {
             )}
           </div>
         ) : (
+          /* CAROUSEL UTAMA */
           <div className="flex-grow flex items-center justify-center w-full px-0 md:px-10 relative pb-10 mt-[-2rem] md:mt-0">
+            {/* TOMBOL KIRI (Panah) */}
             <button
               onClick={scrollLeft}
-              className="absolute left-4 md:left-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"
+              // left-0: Nempel di ujung kiri layar untuk memaksakan responsiveness di iOS
+              className="absolute left-0 md:left-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -309,14 +320,18 @@ function GalleryWalls() {
                 />
               </svg>
             </button>
+
+            {/* SLIDER AREA (Swipeable) */}
             <div
               ref={sliderRef}
+              // px-4: Padding pada slider untuk memberikan ruang bagi tombol panah di HP
               className="flex gap-4 md:gap-12 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 md:px-12 py-8 md:py-10 no-scrollbar w-full max-w-7xl items-center"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {filteredArtworks.map((art) => (
                 <div
                   key={art.id || art._id}
+                  // min-w-[90vw]: FIX LEBAR DI iOS. Menjamin kartu mengambil 90% lebar viewport.
                   className="flex-none min-w-[90vw] md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.5rem)] snap-center bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-[1.02] transition-transform duration-300 relative group cursor-pointer"
                   onClick={() => navigate(`/artwork/${art.id || art._id}`)}
                 >
@@ -324,6 +339,7 @@ function GalleryWalls() {
                     {art.category}
                   </div>
 
+                  {/* AREA GAMBAR DIKUNCI TINGGINYA (h-64 FIX GEPENG) */}
                   <div className="h-64 md:h-80 overflow-hidden flex justify-center mt-6 md:mt-8 px-4 md:px-6">
                     <img
                       src={art.image || art.imageUrl}
@@ -375,9 +391,11 @@ function GalleryWalls() {
               ))}
             </div>
 
+            {/* TOMBOL KANAN (Panah) */}
             <button
               onClick={scrollRight}
-              className="absolute right-4 md:right-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"
+              // right-0: Nempel di ujung kanan layar
+              className="absolute right-0 md:right-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
