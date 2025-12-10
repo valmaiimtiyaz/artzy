@@ -75,19 +75,22 @@ function GalleryWalls() {
 
   const scrollLeft = () => {
     if (sliderRef.current) {
-      // Mengubah nilai scroll menjadi 90vw + gap untuk pergeseran kartu penuh
+      // Scroll sebesar lebar kartu + gap
       const cardWidth =
-        sliderRef.current.querySelector(".snap-center")?.offsetWidth || 350;
-      sliderRef.current.scrollBy({ left: -cardWidth - 16, behavior: "smooth" }); // 16px untuk gap-4
+        sliderRef.current.querySelector(".snap-center")?.offsetWidth || 300;
+      sliderRef.current.scrollBy({
+        left: -(cardWidth + 16),
+        behavior: "smooth",
+      });
     }
   };
 
   const scrollRight = () => {
     if (sliderRef.current) {
-      // Mengubah nilai scroll menjadi 90vw + gap untuk pergeseran kartu penuh
+      // Scroll sebesar lebar kartu + gap
       const cardWidth =
-        sliderRef.current.querySelector(".snap-center")?.offsetWidth || 350;
-      sliderRef.current.scrollBy({ left: cardWidth + 16, behavior: "smooth" }); // 16px untuk gap-4
+        sliderRef.current.querySelector(".snap-center")?.offsetWidth || 300;
+      sliderRef.current.scrollBy({ left: cardWidth + 16, behavior: "smooth" });
     }
   };
 
@@ -104,7 +107,7 @@ function GalleryWalls() {
 
   return (
     <div className="min-h-screen flex flex-col font-montserrat">
-      {/* HEADER / NAVBAR (Responsive dengan Burger) - (Tidak ada perubahan di sini) */}
+      {/* HEADER / NAVBAR */}
       <header className="sticky top-0 z-50 bg-[#F4EFEB] shadow-md w-full border-b border-gray-300">
         <div className="max-w-full mx-auto flex justify-between items-center px-4 md:px-6 py-3 md:py-5">
           <div className="text-3xl md:text-4xl font-extrabold text-[#442D1D] font-montserrat">
@@ -210,16 +213,15 @@ function GalleryWalls() {
           </div>
         )}
       </header>
-      {/* ------------------------------------------------------------------------ */}
 
       <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
-        {/* JUDUL & FILTER CONTAINER - (Tidak ada perubahan di sini) */}
+        {/* JUDUL & FILTER CONTAINER */}
         <div className="relative mt-6 md:mt-10 px-4 md:px-10 pt-4 pb-0 md:py-4 max-w-7xl mx-auto w-full">
           <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] text-center mb-4 md:mb-0">
             Gallery Walls
           </h1>
 
-          {/* FILTER BUTTON & DROPDOWN (Rata Kanan di HP) */}
+          {/* FILTER BUTTON */}
           <div className="flex justify-end md:absolute md:right-10 md:top-1/2 md:-translate-y-1/2 w-full md:w-auto mt-4 px-4">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -269,7 +271,7 @@ function GalleryWalls() {
           </div>
         </div>
 
-        {/* LOADING & EMPTY STATES - (Tidak ada perubahan di sini) */}
+        {/* LOADING & EMPTY STATES */}
         {isLoading ? (
           <div className="flex-grow flex items-center justify-center w-full px-4 md:px-10 mt-[-1rem] md:mt-0">
             <div className="flex gap-6 overflow-hidden w-full max-w-7xl items-center">
@@ -303,7 +305,7 @@ function GalleryWalls() {
         ) : (
           /* CAROUSEL UTAMA */
           <div className="flex-grow flex items-center justify-center w-full px-0 md:px-10 relative pb-10 mt-[-2rem] md:mt-0">
-            {/* TOMBOL KIRI (Panah) */}
+            {/* TOMBOL KIRI */}
             <button
               onClick={scrollLeft}
               className="absolute left-0 md:left-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"
@@ -324,7 +326,7 @@ function GalleryWalls() {
               </svg>
             </button>
 
-            {/* SLIDER AREA (Swipeable) */}
+            {/* SLIDER AREA */}
             <div
               ref={sliderRef}
               className="flex gap-4 md:gap-12 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 md:px-12 py-8 md:py-10 no-scrollbar w-full max-w-7xl items-center"
@@ -333,21 +335,21 @@ function GalleryWalls() {
               {filteredArtworks.map((art) => (
                 <div
                   key={art.id || art._id}
-                  // **REVISI PENTING** : min-w-[90vw] memastikan lebar yang konsisten di HP (terutama iOS)
-                  // h-auto memastikan tinggi kartu menyesuaikan konten (penting untuk flex-col)
-                  className="flex-none min-w-[90vw] h-auto md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.5rem)] snap-center bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-center transform hover:scale-[1.02] transition-transform duration-300 relative group cursor-pointer"
+                  // FIX 1: min-w-[90vw] supaya card lebar penuh di HP
+                  // FIX 2: justify-between supaya konten (judul/footer) tidak saling tindih
+                  className="flex-none min-w-[90vw] md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.5rem)] snap-center bg-[#E8D1A7] text-center rounded-xl shadow-lg overflow-hidden flex flex-col justify-between transform hover:scale-[1.02] transition-transform duration-300 relative group cursor-pointer"
                   onClick={() => navigate(`/artwork/${art.id || art._id}`)}
                 >
                   <div className="absolute top-4 right-4 bg-white/80 px-3 py-1 rounded-full text-xs font-bold text-[#442D1D] shadow-sm z-10">
                     {art.category}
                   </div>
 
-                  {/* **REVISI PENTING** : Kontainer gambar dikunci tingginya (h-64/h-80) */}
-                  <div className="h-64 md:h-80 overflow-hidden flex justify-center mt-6 md:mt-8 px-4 md:px-6">
+                  {/* FIX 3: Container Gambar dikunci tingginya */}
+                  <div className="h-64 md:h-80 w-full overflow-hidden flex justify-center items-center mt-6 md:mt-8 px-4 md:px-6">
                     <img
                       src={art.image || art.imageUrl}
                       alt={art.title}
-                      // **REVISI PENTING** : object-cover menjaga rasio aspek dan mengisi kontainer
+                      // FIX 4: object-cover + w-full h-full agar tidak gepeng dan memenuhi kotak
                       className="w-full h-full object-cover rounded-md shadow-sm"
                     />
                   </div>
@@ -395,7 +397,7 @@ function GalleryWalls() {
               ))}
             </div>
 
-            {/* TOMBOL KANAN (Panah) - (Tidak ada perubahan di sini) */}
+            {/* TOMBOL KANAN */}
             <button
               onClick={scrollRight}
               className="absolute right-0 md:right-10 z-20 p-1 md:p-2 rounded-full bg-white/70 md:bg-transparent shadow-md md:shadow-none hover:bg-[#442D1D]/10 transition cursor-pointer"
