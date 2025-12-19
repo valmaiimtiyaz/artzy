@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toastError } from "../components/ToastWithProgress"; // Pastikan import toastError
 
 function GalleryWalls() {
   const navigate = useNavigate();
@@ -9,21 +10,30 @@ function GalleryWalls() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // State Login Status
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const sliderRef = useRef(null);
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/login");
-      return;
+
+    // Set status login
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
 
     const fetchArtworks = async () => {
       setIsLoading(true);
       try {
+        // Fetch conditional: Pakai token jika ada, jika tidak kosongkan headers
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
         const res = await fetch(`${API_BASE_URL}/api/artworks`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: headers,
         });
         const data = await res.json();
         if (res.ok) {
@@ -36,11 +46,18 @@ function GalleryWalls() {
       }
     };
     fetchArtworks();
-  }, [navigate]);
+  }, []); // Hapus [navigate] agar tidak infinite loop
 
   const handleLike = async (e, artworkId) => {
     e.stopPropagation();
     const token = localStorage.getItem("token");
+
+    // Cek Login saat Like
+    if (!token) {
+      toastError("Please login to like artworks!");
+      navigate("/login");
+      return;
+    }
 
     setArtworks((prev) =>
       prev.map((art) => {
@@ -123,18 +140,31 @@ function GalleryWalls() {
             >
               Gallery Walls
             </Link>
+
+            {/* Logic Button Add Artwork */}
             <Link
-              to="/add-artwork"
+              to={isLoggedIn ? "/add-artwork" : "/login"}
               className="hover:text-amber-700 transition duration-150"
             >
               Add Artwork
             </Link>
-            <Link
-              to="/profile"
-              className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
-            >
-              Profile
-            </Link>
+
+            {/* Logic Button Profile/Login */}
+            {isLoggedIn ? (
+              <Link
+                to="/profile"
+                className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
+              >
+                Profile
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="font-semibold py-1.5 px-6 bg-[#442D1D] text-white border border-[#442D1D] rounded-3xl hover:bg-transparent hover:text-[#442D1D] transition duration-200"
+              >
+                Login
+              </Link>
+            )}
           </nav>
 
           <div className="md:hidden">
@@ -142,6 +172,7 @@ function GalleryWalls() {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-[#442D1D] focus:outline-none"
             >
+              {/* Icon Menu */}
               {isMenuOpen ? (
                 <svg
                   className="w-7 h-7"
@@ -191,20 +222,34 @@ function GalleryWalls() {
             >
               Gallery Walls
             </Link>
+
+            {/* Logic Mobile Add Artwork */}
             <Link
-              to="/add-artwork"
+              to={isLoggedIn ? "/add-artwork" : "/login"}
               onClick={() => setIsMenuOpen(false)}
               className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
             >
               Add Artwork
             </Link>
-            <Link
-              to="/profile"
-              onClick={() => setIsMenuOpen(false)}
-              className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
-            >
-              Profile
-            </Link>
+
+            {/* Logic Mobile Profile/Login */}
+            {isLoggedIn ? (
+              <Link
+                to="/profile"
+                onClick={() => setIsMenuOpen(false)}
+                className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
+              >
+                Profile
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+                className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-white text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
+              >
+                Login
+              </Link>
+            )}
           </div>
         )}
       </header>
@@ -214,7 +259,7 @@ function GalleryWalls() {
           <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] text-center mb-4">
             Gallery Walls
           </h1>
-
+          {/* ... SISA KODE (Filter Button, Grid Artworks, Slider) TIDAK BERUBAH DARI SEBELUMNYA ... */}
           <div className="flex justify-center md:justify-end w-full relative">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -269,7 +314,7 @@ function GalleryWalls() {
               No artworks found.
             </p>
             <button
-              onClick={() => navigate("/add-artwork")}
+              onClick={() => navigate(isLoggedIn ? "/add-artwork" : "/login")}
               className="bg-[#442D1D] text-white py-2 px-6 rounded-full"
             >
               + Add Artwork
@@ -277,6 +322,7 @@ function GalleryWalls() {
           </div>
         ) : (
           <div className="flex-grow flex flex-col justify-center w-full pb-10">
+            {/* Slider Controls & Grid (Sama seperti sebelumnya) */}
             <div className="relative w-full">
               <button
                 onClick={scrollLeft}
@@ -297,7 +343,6 @@ function GalleryWalls() {
                   />
                 </svg>
               </button>
-
               <div
                 ref={sliderRef}
                 className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 md:px-12 py-8 no-scrollbar w-full max-w-7xl mx-auto items-stretch"
@@ -306,22 +351,12 @@ function GalleryWalls() {
                 {filteredArtworks.map((art) => (
                   <div
                     key={art.id || art._id}
-                    className="
-                      snap-center shrink-0 
-                      flex flex-col
-                      bg-[#E8D1A7] rounded-3xl shadow-lg overflow-hidden relative group cursor-pointer 
-                      transform hover:scale-[1.02] transition-transform duration-300
-                      
-                      min-w-full 
-                      md:min-w-[calc(50%-0.75rem)] 
-                      lg:min-w-[calc(33.333%-1rem)]
-                    "
+                    className="snap-center shrink-0 flex flex-col bg-[#E8D1A7] rounded-3xl shadow-lg overflow-hidden relative group cursor-pointer transform hover:scale-[1.02] transition-transform duration-300 min-w-full md:min-w-[calc(50%-0.75rem)] lg:min-w-[calc(33.333%-1rem)]"
                     onClick={() => navigate(`/artwork/${art.id || art._id}`)}
                   >
                     <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-[#442D1D] z-10 shadow-sm">
                       {art.category}
                     </div>
-
                     <div className="w-full aspect-square relative bg-gray-200">
                       <img
                         src={art.image || art.imageUrl}
@@ -329,7 +364,6 @@ function GalleryWalls() {
                         className="absolute inset-0 w-full h-full object-cover"
                       />
                     </div>
-
                     <div className="p-5 bg-[#E8D1A7] flex flex-col justify-between flex-grow">
                       <div className="flex justify-between items-start mb-2">
                         <div className="max-w-[80%]">
@@ -340,7 +374,6 @@ function GalleryWalls() {
                             by {art.artist}
                           </p>
                         </div>
-
                         <button
                           onClick={(e) => handleLike(e, art.id)}
                           className="flex flex-col items-center justify-center ml-2 min-w-[40px] pt-1"
@@ -364,7 +397,6 @@ function GalleryWalls() {
                           </span>
                         </button>
                       </div>
-
                       <div className="mt-3 pt-3 border-t border-[#442D1D]/20 flex justify-between items-center">
                         <span className="text-xs font-bold text-[#442D1D] uppercase tracking-wider">
                           Tap to view
@@ -388,7 +420,6 @@ function GalleryWalls() {
                   </div>
                 ))}
               </div>
-
               <button
                 onClick={scrollRight}
                 className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/70 shadow-md hover:bg-[#442D1D]/10 transition cursor-pointer"
@@ -412,11 +443,7 @@ function GalleryWalls() {
           </div>
         )}
       </main>
-
-      <style>{`
-          .no-scrollbar::-webkit-scrollbar { display: none; }
-          .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
+      <style>{`.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }`}</style>
     </div>
   );
 }

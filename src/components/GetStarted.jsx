@@ -15,7 +15,7 @@ function GetStarted() {
           </p>
 
           <Link
-            to="/login"
+            to="/beranda"
             className="bg-white text-[#442D1D] font-medium text-lg md:text-2xl py-3 px-8 md:py-4 md:px-10 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 flex items-center gap-2 font-montserrat"
           >
             Get Started

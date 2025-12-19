@@ -16,6 +16,9 @@ function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Karena profile page di-protect, user PASTI logged in
+  const isLoggedIn = true;
+
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
@@ -86,28 +89,24 @@ function Profile() {
           <nav className="hidden md:flex items-center font-medium text-[#442D1D] text-lg font-montserrat gap-6">
             <Link
               to="/beranda"
-              onClick={() => setIsMenuOpen(false)}
               className="hover:text-amber-700 transition duration-150"
             >
               Home
             </Link>
             <Link
               to="/gallery-walls"
-              onClick={() => setIsMenuOpen(false)}
               className="hover:text-amber-700 transition duration-150"
             >
               Gallery Walls
             </Link>
             <Link
               to="/add-artwork"
-              onClick={() => setIsMenuOpen(false)}
               className="hover:text-amber-700 transition duration-150"
             >
               Add Artwork
             </Link>
             <Link
               to="/profile"
-              onClick={() => setIsMenuOpen(false)}
               className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
             >
               Profile
@@ -186,12 +185,15 @@ function Profile() {
         )}
       </header>
 
+      {/* ... SISA KONTEN PROFILE (Main, Detail Info, Logout) TIDAK PERLU DIUBAH KARENA SUDAH BENAR ... */}
       <main className="flex-grow flex flex-col items-center p-4 sm:p-8 md:p-12 font-montserrat gallery-gradient-bg">
+        {/* Konten tetap sama seperti kodemu sebelumnya */}
         <div className="w-full max-w-4xl space-y-6 md:space-y-8">
           <h1 className="text-2xl md:text-4xl font-bold text-[#442D1D] mb-4 md:mb-8 text-center md:text-left mt-3">
             My Profile
           </h1>
 
+          {/* Section Foto & Nama */}
           <div className="w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-[20px] p-6 md:p-8 flex flex-col md:flex-row justify-between items-center md:items-start shadow-lg gap-4">
             <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 w-full md:w-auto">
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-white/50 shadow-sm overflow-hidden bg-[#442D1D]/10 flex items-center justify-center flex-shrink-0">
@@ -208,7 +210,6 @@ function Profile() {
                   />
                 )}
               </div>
-
               <div className="text-center sm:text-left">
                 <p className="text-xl md:text-2xl font-bold text-[#442D1D]">
                   {profileData.first_name} {profileData.last_name}
@@ -218,16 +219,15 @@ function Profile() {
                 </p>
               </div>
             </div>
-
             <button
               onClick={() => navigate("/edit-profile")}
               className="flex items-center space-x-2 bg-[#442D1D] text-white text-sm md:text-base font-semibold py-2 px-4 md:px-6 rounded-full shadow-md hover:bg-[#6c4e3e] transition duration-200 cursor-pointer flex-shrink-0 w-full sm:w-auto mt-4 md:mt-0"
             >
-              <Edit3 className="w-4 h-4" />
-              <span>Edit Profile</span>
+              <Edit3 className="w-4 h-4" /> <span>Edit Profile</span>
             </button>
           </div>
 
+          {/* Personal Info */}
           <div className="w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-[20px] p-6 md:p-10 shadow-lg">
             <h3 className="text-lg md:text-xl font-bold text-[#442D1D] mb-4 md:mb-6 border-b border-[#442D1D]/20 pb-2">
               Personal Information
@@ -241,7 +241,6 @@ function Profile() {
                   {profileData.first_name || "-"}
                 </p>
               </div>
-
               <div className="flex flex-col">
                 <label className="text-xs font-semibold text-[#442D1D]/70 mb-1">
                   Last Name
@@ -250,7 +249,6 @@ function Profile() {
                   {profileData.last_name || "-"}
                 </p>
               </div>
-
               <div className="flex flex-col">
                 <label className="text-xs font-semibold text-[#442D1D]/70 mb-1">
                   Email Address
@@ -262,6 +260,7 @@ function Profile() {
             </div>
           </div>
 
+          {/* Profile Summary */}
           <div className="w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-[20px] p-6 md:p-10 shadow-lg">
             <h3 className="text-lg md:text-xl font-bold text-[#442D1D] mb-4 md:mb-6 border-b border-[#442D1D]/20 pb-2">
               Profile Summary

@@ -10,12 +10,14 @@ function PublicProfile() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userFound, setUserFound] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State Login
 
   const sliderRef = useRef(null);
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    if (token) setIsLoggedIn(true);
 
     const fetchUserArtworks = async () => {
       setIsLoading(true);
@@ -23,6 +25,7 @@ function PublicProfile() {
         const res = await fetch(
           `${API_BASE_URL}/api/artworks/user/${username}`,
           {
+            // Kirim token jika ada (agar status liked terbaca), jika tidak ada tetap fetch
             headers: token ? { Authorization: `Bearer ${token}` } : {},
           }
         );
@@ -83,29 +86,25 @@ function PublicProfile() {
     }
   };
 
+  // ... (Filtered Artworks, Scroll Logic, Categories sama seperti sebelumnya) ...
   const filteredArtworks =
     selectedCategory === "All"
       ? artworks
       : artworks.filter((art) => art.category === selectedCategory);
-
   const scrollLeft = () => {
-    if (sliderRef.current) {
+    if (sliderRef.current)
       sliderRef.current.scrollBy({
         left: -sliderRef.current.clientWidth,
         behavior: "smooth",
       });
-    }
   };
-
   const scrollRight = () => {
-    if (sliderRef.current) {
+    if (sliderRef.current)
       sliderRef.current.scrollBy({
         left: sliderRef.current.clientWidth,
         behavior: "smooth",
       });
-    }
   };
-
   const categories = [
     "All",
     "Painting",
@@ -156,18 +155,29 @@ function PublicProfile() {
             >
               Gallery Walls
             </Link>
+
+            {/* Dynamic Navbar */}
             <Link
-              to="/add-artwork"
+              to={isLoggedIn ? "/add-artwork" : "/login"}
               className="hover:text-amber-700 transition duration-150"
             >
               Add Artwork
             </Link>
-            <Link
-              to="/profile"
-              className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
-            >
-              Profile
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                to="/profile"
+                className="font-semibold py-1.5 px-6 border border-gray-500 rounded-3xl hover:bg-[#442D1D] hover:text-white transition duration-200"
+              >
+                Profile
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="font-semibold py-1.5 px-6 bg-[#442D1D] text-white border border-[#442D1D] rounded-3xl hover:bg-transparent hover:text-[#442D1D] transition duration-200"
+              >
+                Login
+              </Link>
+            )}
           </nav>
 
           <div className="md:hidden">
@@ -225,29 +235,37 @@ function PublicProfile() {
               Gallery Walls
             </Link>
             <Link
-              to="/add-artwork"
+              to={isLoggedIn ? "/add-artwork" : "/login"}
               onClick={() => setIsMenuOpen(false)}
               className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
             >
               Add Artwork
             </Link>
-            <Link
-              to="/profile"
-              onClick={() => setIsMenuOpen(false)}
-              className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
-            >
-              Profile
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                to="/profile"
+                onClick={() => setIsMenuOpen(false)}
+                className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-[#E8D1A7] text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
+              >
+                Profile
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setIsMenuOpen(false)}
+                className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-white text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
+              >
+                Login
+              </Link>
+            )}
           </div>
         )}
       </header>
 
+      {/* ... SISA KONTEN (Header User, Grid, Slider) TIDAK BERUBAH ... */}
       <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
         <div className="relative mt-6 md:mt-10 px-4 max-w-7xl mx-auto w-full mb-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] text-center mb-4 capitalize">
-            {`${username}'s Walls`}
-          </h1>
-
+          <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] text-center mb-4 capitalize">{`${username}'s Walls`}</h1>
           <div className="flex justify-center md:justify-end w-full relative">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -294,29 +312,15 @@ function PublicProfile() {
 
         {isLoading ? (
           <div className="flex-grow flex flex-col justify-center w-full pb-10">
+            {/* Loading Skeleton */}
             <div className="relative w-full">
               <div className="flex gap-4 md:gap-6 overflow-hidden px-4 md:px-12 py-8 w-full max-w-7xl mx-auto items-stretch">
                 {[1, 2, 3].map((item) => (
                   <div
                     key={item}
-                    className="
-                       shrink-0 flex flex-col
-                       bg-[#E8D1A7]/40 rounded-3xl shadow-none overflow-hidden relative 
-                       animate-pulse
-                       
-                       min-w-full 
-                       md:min-w-[calc(50%-0.75rem)] 
-                       lg:min-w-[calc(33.333%-1rem)]
-                     "
+                    className="shrink-0 flex flex-col bg-[#E8D1A7]/40 rounded-3xl shadow-none overflow-hidden relative animate-pulse min-w-full md:min-w-[calc(50%-0.75rem)] lg:min-w-[calc(33.333%-1rem)]"
                   >
                     <div className="w-full aspect-square bg-[#442D1D]/10"></div>
-                    <div className="p-5 flex flex-col justify-between flex-grow gap-4">
-                      <div className="space-y-3">
-                        <div className="h-6 w-3/4 bg-[#442D1D]/10 rounded-md"></div>
-                        <div className="h-4 w-1/2 bg-[#442D1D]/10 rounded-md"></div>
-                      </div>
-                      <div className="h-4 w-full bg-[#442D1D]/5 rounded-md mt-2"></div>
-                    </div>
                   </div>
                 ))}
               </div>
@@ -350,7 +354,6 @@ function PublicProfile() {
                   />
                 </svg>
               </button>
-
               <div
                 ref={sliderRef}
                 className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth px-4 md:px-12 py-8 no-scrollbar w-full max-w-7xl mx-auto items-stretch"
@@ -359,22 +362,12 @@ function PublicProfile() {
                 {filteredArtworks.map((art) => (
                   <div
                     key={art.id || art._id}
-                    className="
-                      snap-center shrink-0 
-                      flex flex-col
-                      bg-[#E8D1A7] rounded-3xl shadow-lg overflow-hidden relative group cursor-pointer 
-                      transform hover:scale-[1.02] transition-transform duration-300
-                      
-                      min-w-full 
-                      md:min-w-[calc(50%-0.75rem)] 
-                      lg:min-w-[calc(33.333%-1rem)]
-                    "
+                    className="snap-center shrink-0 flex flex-col bg-[#E8D1A7] rounded-3xl shadow-lg overflow-hidden relative group cursor-pointer transform hover:scale-[1.02] transition-transform duration-300 min-w-full md:min-w-[calc(50%-0.75rem)] lg:min-w-[calc(33.333%-1rem)]"
                     onClick={() => navigate(`/artwork/${art.id || art._id}`)}
                   >
                     <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-[#442D1D] z-10 shadow-sm">
                       {art.category}
                     </div>
-
                     <div className="w-full aspect-square relative bg-gray-200">
                       <img
                         src={art.image || art.imageUrl}
@@ -382,7 +375,6 @@ function PublicProfile() {
                         className="absolute inset-0 w-full h-full object-cover"
                       />
                     </div>
-
                     <div className="p-5 bg-[#E8D1A7] flex flex-col justify-between flex-grow">
                       <div className="flex justify-between items-start mb-2">
                         <div className="max-w-[80%]">
@@ -393,7 +385,6 @@ function PublicProfile() {
                             by {art.artist}
                           </p>
                         </div>
-
                         <button
                           onClick={(e) => handleLike(e, art.id)}
                           className="flex flex-col items-center justify-center ml-2 min-w-[40px] pt-1"
@@ -417,7 +408,6 @@ function PublicProfile() {
                           </span>
                         </button>
                       </div>
-
                       <div className="mt-3 pt-3 border-t border-[#442D1D]/20 flex justify-between items-center">
                         <span className="text-xs font-bold text-[#442D1D] uppercase tracking-wider">
                           Tap to view
@@ -441,7 +431,6 @@ function PublicProfile() {
                   </div>
                 ))}
               </div>
-
               <button
                 onClick={scrollRight}
                 className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-white/70 shadow-md hover:bg-[#442D1D]/10 transition cursor-pointer"
@@ -465,11 +454,7 @@ function PublicProfile() {
           </div>
         )}
       </main>
-
-      <style>{`
-          .no-scrollbar::-webkit-scrollbar { display: none; }
-          .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
+      <style>{`.no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }`}</style>
     </div>
   );
 }
