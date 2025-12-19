@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// Import useLocation
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import loginBg from "../assets/Rumah Fantasi 2.png";
 import { toastSuccess, toastError } from "../components/ToastWithProgress";
@@ -9,18 +10,22 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  // 1. Ambil data lokasi (state)
   const location = useLocation();
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
-  const token = localStorage.getItem("token");
-  const backPath = location.state?.from || (token ? "/beranda" : "/");
+  // 2. Tentukan tujuan Back
+  // Jika ada state 'from' (misal: /beranda), pakai itu. Jika tidak, default ke / (Home)
+  const backPath = location.state?.from || "/";
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (token) {
       navigate("/beranda");
     }
-  }, [navigate, token]);
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,6 +49,7 @@ function LoginPage() {
       localStorage.setItem("token", data.token);
       toastSuccess("Login success!");
 
+      // Redirect juga pintar: Balik ke halaman asal (kalau ada), atau ke Beranda
       navigate(location.state?.from || "/beranda");
     } catch (err) {
       toastError(err.message);
@@ -53,9 +59,10 @@ function LoginPage() {
   return (
     <div className="flex flex-col md:flex-row w-screen min-h-screen md:h-screen overflow-auto md:overflow-hidden bg-[#F4EFEB] font-montserrat">
       <div className="w-full md:w-2/5 flex flex-col justify-center items-center md:items-start px-6 md:px-24 py-10 gap-4 md:gap-6 text-[#442D1D] relative min-h-screen md:min-h-0">
+        {/* --- TOMBOL BACK DINAMIS --- */}
         <div className="absolute top-6 left-6 md:top-8 md:left-8 text-xl">
           <Link
-            to={backPath} 
+            to={backPath} // <-- Menggunakan path yang sudah ditentukan di atas
             className="flex items-center gap-1 hover:opacity-75 transition"
           >
             <svg
@@ -74,6 +81,7 @@ function LoginPage() {
             <span className="text-base md:text-lg font-medium">Back</span>
           </Link>
         </div>
+        {/* -------------------------- */}
 
         <div className="flex flex-col gap-1 md:gap-2 mb-4 md:mb-6 mt-0 md:mt-20 w-full items-center text-center">
           <h1 className="text-2xl md:text-4xl font-bold text-[#442D1D]">
@@ -144,12 +152,11 @@ function LoginPage() {
             </div>
           </div>
 
+          {/* Untuk Forgot Password, kita teruskan juga statenya agar tombol back disana konsisten */}
           <button
             type="button"
             onClick={() =>
-              navigate("/forgot-password", {
-                state: { from: location.state?.from },
-              })
+              navigate("/forgot-password", { state: { from: backPath } })
             }
             className="self-start text-xs md:text-sm hover:underline text-[#442D1D] font-medium cursor-pointer"
           >
@@ -176,7 +183,7 @@ function LoginPage() {
             Don't have an account?{" "}
             <Link
               to="/register"
-              state={{ from: location.state?.from }} 
+              state={{ from: backPath }} // Teruskan state ke halaman register juga
               className="font-bold hover:underline text-[#442D1D]"
             >
               Create an account
