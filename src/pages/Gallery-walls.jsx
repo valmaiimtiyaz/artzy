@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toastError } from "../components/ToastWithProgress"; // Pastikan import toastError
+import toast from "react-hot-toast"; 
 
 function GalleryWalls() {
   const navigate = useNavigate();
@@ -9,17 +9,13 @@ function GalleryWalls() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // State Login Status
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const sliderRef = useRef(null);
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    // Set status login
     if (token) {
       setIsLoggedIn(true);
     } else {
@@ -29,7 +25,6 @@ function GalleryWalls() {
     const fetchArtworks = async () => {
       setIsLoading(true);
       try {
-        // Fetch conditional: Pakai token jika ada, jika tidak kosongkan headers
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
         const res = await fetch(`${API_BASE_URL}/api/artworks`, {
@@ -46,15 +41,14 @@ function GalleryWalls() {
       }
     };
     fetchArtworks();
-  }, []); // Hapus [navigate] agar tidak infinite loop
+  }, []); 
 
   const handleLike = async (e, artworkId) => {
     e.stopPropagation();
     const token = localStorage.getItem("token");
 
-    // Cek Login saat Like
     if (!token) {
-      toastError("Please login to like artworks!");
+      toast.error("Please login to like artworks!");
       navigate("/login");
       return;
     }
@@ -82,6 +76,7 @@ function GalleryWalls() {
       });
     } catch (err) {
       console.error("Like failed", err);
+      toast.error("Failed to like artwork"); 
     }
   };
 
@@ -140,16 +135,12 @@ function GalleryWalls() {
             >
               Gallery Walls
             </Link>
-
-            {/* Logic Button Add Artwork */}
             <Link
               to={isLoggedIn ? "/add-artwork" : "/login"}
               className="hover:text-amber-700 transition duration-150"
             >
               Add Artwork
             </Link>
-
-            {/* Logic Button Profile/Login */}
             {isLoggedIn ? (
               <Link
                 to="/profile"
@@ -172,7 +163,6 @@ function GalleryWalls() {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-[#442D1D] focus:outline-none"
             >
-              {/* Icon Menu */}
               {isMenuOpen ? (
                 <svg
                   className="w-7 h-7"
@@ -222,8 +212,6 @@ function GalleryWalls() {
             >
               Gallery Walls
             </Link>
-
-            {/* Logic Mobile Add Artwork */}
             <Link
               to={isLoggedIn ? "/add-artwork" : "/login"}
               onClick={() => setIsMenuOpen(false)}
@@ -231,8 +219,7 @@ function GalleryWalls() {
             >
               Add Artwork
             </Link>
-
-            {/* Logic Mobile Profile/Login */}
+            
             {isLoggedIn ? (
               <Link
                 to="/profile"
@@ -259,7 +246,6 @@ function GalleryWalls() {
           <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] text-center mb-4">
             Gallery Walls
           </h1>
-          {/* ... SISA KODE (Filter Button, Grid Artworks, Slider) TIDAK BERUBAH DARI SEBELUMNYA ... */}
           <div className="flex justify-center md:justify-end w-full relative">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -322,7 +308,6 @@ function GalleryWalls() {
           </div>
         ) : (
           <div className="flex-grow flex flex-col justify-center w-full pb-10">
-            {/* Slider Controls & Grid (Sama seperti sebelumnya) */}
             <div className="relative w-full">
               <button
                 onClick={scrollLeft}

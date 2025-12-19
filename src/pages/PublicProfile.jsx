@@ -10,7 +10,7 @@ function PublicProfile() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userFound, setUserFound] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State Login
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
 
   const sliderRef = useRef(null);
   const API_BASE_URL = "https://artzybackend.vercel.app";
@@ -25,7 +25,6 @@ function PublicProfile() {
         const res = await fetch(
           `${API_BASE_URL}/api/artworks/user/${username}`,
           {
-            // Kirim token jika ada (agar status liked terbaca), jika tidak ada tetap fetch
             headers: token ? { Authorization: `Bearer ${token}` } : {},
           }
         );
@@ -86,7 +85,6 @@ function PublicProfile() {
     }
   };
 
-  // ... (Filtered Artworks, Scroll Logic, Categories sama seperti sebelumnya) ...
   const filteredArtworks =
     selectedCategory === "All"
       ? artworks
@@ -155,8 +153,6 @@ function PublicProfile() {
             >
               Gallery Walls
             </Link>
-
-            {/* Dynamic Navbar */}
             <Link
               to={isLoggedIn ? "/add-artwork" : "/login"}
               className="hover:text-amber-700 transition duration-150"
@@ -262,7 +258,6 @@ function PublicProfile() {
         )}
       </header>
 
-      {/* ... SISA KONTEN (Header User, Grid, Slider) TIDAK BERUBAH ... */}
       <main className="flex-grow w-full flex flex-col gallery-gradient-bg overflow-hidden bg-gradient-to-b from-[#F4EFEB] to-[#C5B49A]">
         <div className="relative mt-6 md:mt-10 px-4 max-w-7xl mx-auto w-full mb-6">
           <h1 className="text-3xl md:text-4xl font-bold text-[#442D1D] text-center mb-4 capitalize">{`${username}'s Walls`}</h1>

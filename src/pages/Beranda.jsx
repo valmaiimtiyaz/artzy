@@ -5,8 +5,6 @@ function Beranda() {
   const [username, setUsername] = useState("User");
   const [searchQuery, setSearchQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // State untuk status login
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const navigate = useNavigate();
@@ -16,8 +14,7 @@ function Beranda() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      setIsLoggedIn(true); // User terdeteksi login
-
+      setIsLoggedIn(true); 
       const fetchProfile = async () => {
         try {
           const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
@@ -31,7 +28,7 @@ function Beranda() {
       };
       fetchProfile();
     } else {
-      setIsLoggedIn(false); // User belum login
+      setIsLoggedIn(false); 
     }
   }, [navigate]);
 
@@ -42,14 +39,10 @@ function Beranda() {
     }
   };
 
-  // Fungsi helper untuk menghandle klik Add Artwork
-  // Opsional: Bisa dikasi alert "Please login first" jika mau lebih jelas
   const handleAddArtworkClick = (e) => {
     if (!isLoggedIn) {
-      // Opsional: alert("Silakan login terlebih dahulu!");
-      // Link akan otomatis mengarah ke /login karena logika di bawah
     }
-    setIsMenuOpen(false); // Tutup menu mobile jika sedang dibuka
+    setIsMenuOpen(false); 
   };
 
   return (

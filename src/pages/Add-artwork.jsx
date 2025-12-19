@@ -12,15 +12,12 @@ function AddArtwork() {
   const [year, setYear] = useState("");
   const [category, setCategory] = useState("Painting");
   const [description, setDescription] = useState("");
-
-  // 1. TAMBAHKAN STATE INI (Agar tombol loading berfungsi)
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fileInputRef = useRef(null);
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
 
-  // --- LOGIKA PROTEKSI HALAMAN ---
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -28,8 +25,6 @@ function AddArtwork() {
       navigate("/login");
     }
   }, [navigate]);
-  // --------------------------------
-
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -61,7 +56,6 @@ function AddArtwork() {
       return;
     }
 
-    // 2. SET LOADING JADI TRUE SEBELUM FETCH
     setIsSubmitting(true);
 
     try {
@@ -90,7 +84,6 @@ function AddArtwork() {
     } catch (err) {
       toastError(err.message);
     } finally {
-      // 3. KEMBALIKAN LOADING JADI FALSE (SELESAI ATAU ERROR)
       setIsSubmitting(false);
     }
   };
@@ -127,7 +120,6 @@ function AddArtwork() {
         </h1>
 
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 h-auto max-w-7xl mx-auto">
-          {/* Bagian Upload Gambar (Tidak Berubah) */}
           <div
             className="w-full md:w-1/2 min-h-[300px] lg:h-auto rounded-3xl border-2 border-[#442D1D] bg-[#C5B49A]/60 flex flex-col items-center justify-center cursor-pointer overflow-hidden relative hover:bg-black/5 transition"
             onClick={() => fileInputRef.current.click()}
@@ -209,10 +201,9 @@ function AddArtwork() {
             </div>
 
             <div className="flex justify-center md:justify-end gap-4 md:gap-6 mt-4 mb-5">
-              {/* 4. MODIFIKASI TOMBOL SAVE AGAR DISABLE SAAT LOADING */}
               <button
                 type="submit"
-                disabled={isSubmitting} // Matikan tombol jika sedang submit
+                disabled={isSubmitting} 
                 className={`px-6 py-2 rounded-full text-white font-medium text-base md:text-lg transition bg-[#442D1D] cursor-pointer ${
                   isSubmitting
                     ? "opacity-70 cursor-not-allowed"
@@ -225,7 +216,7 @@ function AddArtwork() {
               <button
                 type="button"
                 onClick={() => navigate("/gallery-walls")}
-                disabled={isSubmitting} // Matikan tombol cancel juga
+                disabled={isSubmitting} 
                 className={`px-6 py-2 rounded-full text-white font-medium text-base md:text-lg transition bg-[#442D1D] cursor-pointer ${
                   isSubmitting
                     ? "opacity-70 cursor-not-allowed"
