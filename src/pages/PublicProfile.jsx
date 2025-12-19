@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { toastError } from "../components/ToastWithProgress";
 
 function PublicProfile() {
   const { username } = useParams();
@@ -10,7 +11,7 @@ function PublicProfile() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userFound, setUserFound] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const sliderRef = useRef(null);
   const API_BASE_URL = "https://artzybackend.vercel.app";
@@ -54,7 +55,7 @@ function PublicProfile() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Please login to like artworks!");
+      toastError("Please login to like artworks!");
       navigate("/login");
       return;
     }
@@ -89,6 +90,7 @@ function PublicProfile() {
     selectedCategory === "All"
       ? artworks
       : artworks.filter((art) => art.category === selectedCategory);
+
   const scrollLeft = () => {
     if (sliderRef.current)
       sliderRef.current.scrollBy({
@@ -96,6 +98,7 @@ function PublicProfile() {
         behavior: "smooth",
       });
   };
+
   const scrollRight = () => {
     if (sliderRef.current)
       sliderRef.current.scrollBy({
@@ -103,6 +106,7 @@ function PublicProfile() {
         behavior: "smooth",
       });
   };
+
   const categories = [
     "All",
     "Painting",
@@ -307,7 +311,6 @@ function PublicProfile() {
 
         {isLoading ? (
           <div className="flex-grow flex flex-col justify-center w-full pb-10">
-            {/* Loading Skeleton */}
             <div className="relative w-full">
               <div className="flex gap-4 md:gap-6 overflow-hidden px-4 md:px-12 py-8 w-full max-w-7xl mx-auto items-stretch">
                 {[1, 2, 3].map((item) => (

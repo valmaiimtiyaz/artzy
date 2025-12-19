@@ -15,8 +15,6 @@ function Profile() {
   const [artworkCount, setArtworkCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  // Karena profile page di-protect, user PASTI logged in
   const isLoggedIn = true;
 
   const API_BASE_URL = "https://artzybackend.vercel.app";

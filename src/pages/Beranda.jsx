@@ -95,17 +95,12 @@ function Beranda() {
               >
                 Gallery Walls
               </Link>
-
-              {/* --- LOGIKA NAVIGASI ADD ARTWORK (DESKTOP) --- */}
-              {/* Jika loggedIn = ke /add-artwork. Jika tidak = ke /login */}
               <Link
                 to={isLoggedIn ? "/add-artwork" : "/login"}
                 className="hover:text-amber-700 transition duration-150"
               >
                 Add Artwork
               </Link>
-              {/* ------------------------------------------- */}
-
               {isLoggedIn ? (
                 <Link
                   to="/profile"
@@ -162,8 +157,6 @@ function Beranda() {
             >
               Gallery Walls
             </Link>
-
-            {/* --- LOGIKA NAVIGASI ADD ARTWORK (MOBILE) --- */}
             <Link
               to={isLoggedIn ? "/add-artwork" : "/login"}
               onClick={handleAddArtworkClick}
@@ -171,7 +164,6 @@ function Beranda() {
             >
               Add Artwork
             </Link>
-            {/* ------------------------------------------ */}
 
             {isLoggedIn ? (
               <Link
