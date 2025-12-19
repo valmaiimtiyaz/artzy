@@ -49,9 +49,10 @@ function LoginPage() {
   return (
     <div className="flex flex-col md:flex-row w-screen min-h-screen md:h-screen overflow-auto md:overflow-hidden bg-[#F4EFEB] font-montserrat">
       <div className="w-full md:w-2/5 flex flex-col justify-center items-center md:items-start px-6 md:px-24 py-10 gap-4 md:gap-6 text-[#442D1D] relative min-h-screen md:min-h-0">
+        {/* --- BAGIAN YANG DIUBAH --- */}
         <div className="absolute top-6 left-6 md:top-8 md:left-8 text-xl">
           <Link
-            to="/"
+            to="/beranda" // Sebelumnya "/", sekarang ke "/beranda"
             className="flex items-center gap-1 hover:opacity-75 transition"
           >
             <svg
@@ -70,6 +71,7 @@ function LoginPage() {
             <span className="text-base md:text-lg font-medium">Back</span>
           </Link>
         </div>
+        {/* ------------------------- */}
 
         <div className="flex flex-col gap-1 md:gap-2 mb-4 md:mb-6 mt-0 md:mt-20 w-full items-center text-center">
           <h1 className="text-2xl md:text-4xl font-bold text-[#442D1D]">
