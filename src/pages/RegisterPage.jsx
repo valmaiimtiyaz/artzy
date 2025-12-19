@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+// Import useLocation
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import registerBg from "../assets/Rumah Fantasi 2.png";
 import { toastSuccess, toastError } from "../components/ToastWithProgress";
 
@@ -12,15 +13,16 @@ function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation(); 
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
+
   const token = localStorage.getItem("token");
-  const backPath = token ? "/beranda" : "/";
+  const backPath = location.state?.from || (token ? "/beranda" : "/");
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
-
     if (
       !username.trim() ||
       !email.trim() ||
@@ -30,12 +32,10 @@ function RegisterPage() {
       setError("All fields must be filled in");
       return;
     }
-
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-
     if (password.length < 8) {
       setError("Password must be at least 8 characters");
       return;
@@ -47,12 +47,11 @@ function RegisterPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),
       });
-
       const data = await response.json();
-
       if (!response.ok) throw new Error(data.error || "Failed to Register");
       toastSuccess("Register success! Please login.");
-      navigate("/login");
+
+      navigate("/login", { state: { from: location.state?.from } });
     } catch (err) {
       toastError(err.message);
     }
@@ -82,12 +81,15 @@ function RegisterPage() {
             <span className="text-base md:text-lg font-medium">Back</span>
           </Link>
         </div>
-
         <div className="flex flex-col gap-1 md:gap-2 mb-4 mt-0 md:mt-10 w-full items-center text-center">
           <h1 className="text-2xl md:text-4xl font-bold">Create an account</h1>
           <p className="text-xs md:text-sm font-medium">
             Already have an account?{" "}
-            <Link to="/login" className="font-bold hover:underline">
+            <Link
+              to="/login"
+              state={{ from: location.state?.from }}
+              className="font-bold hover:underline"
+            >
               Sign in
             </Link>
           </p>
@@ -109,7 +111,6 @@ function RegisterPage() {
               placeholder="LoremKece25"
             />
           </div>
-
           <div className="flex flex-col gap-1">
             <label className="text-sm md:text-base font-semibold">Email</label>
             <input
@@ -120,7 +121,6 @@ function RegisterPage() {
               placeholder="user@gmail.com"
             />
           </div>
-
           <div className="flex flex-col gap-1">
             <label className="text-sm md:text-base font-semibold">
               Password
@@ -164,7 +164,6 @@ function RegisterPage() {
               </button>
             </div>
           </div>
-
           <div className="flex flex-col gap-1">
             <label className="text-sm md:text-base font-semibold">
               Confirm Password
@@ -226,7 +225,6 @@ function RegisterPage() {
           </button>
         </form>
       </div>
-
       <div className="hidden md:block w-3/5 h-full">
         <div className="w-full h-full overflow-hidden">
           <img

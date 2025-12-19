@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import loginBg from "../assets/Rumah Fantasi 2.png";
 
 function ForgotPasswordPage() {
@@ -8,39 +8,34 @@ function ForgotPasswordPage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); 
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
+
   const token = localStorage.getItem("token");
-  const backPath = token ? "/beranda" : "/";
+  const backPath = location.state?.from || (token ? "/beranda" : "/");
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
     setIsLoading(true);
-
     if (!email.trim()) {
       setError("Please enter your email address.");
       setIsLoading(false);
       return;
     }
-
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.error || "Failed to send reset link");
       }
       setSuccessMessage("Reset link has been sent to your email!");
-
       setTimeout(() => {
         navigate("/login");
       }, 5000);
@@ -126,6 +121,7 @@ function ForgotPasswordPage() {
             Remember your password?{" "}
             <Link
               to="/login"
+              state={{ from: location.state?.from }}
               className="font-bold hover:underline text-[#442D1D]"
             >
               Login here
@@ -133,7 +129,6 @@ function ForgotPasswordPage() {
           </p>
         </form>
       </div>
-
       <div className="hidden md:block w-3/5 h-full">
         <div className="w-full h-full overflow-hidden">
           <img

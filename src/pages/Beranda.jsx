@@ -14,7 +14,7 @@ function Beranda() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      setIsLoggedIn(true); 
+      setIsLoggedIn(true);
       const fetchProfile = async () => {
         try {
           const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
@@ -28,7 +28,7 @@ function Beranda() {
       };
       fetchProfile();
     } else {
-      setIsLoggedIn(false); 
+      setIsLoggedIn(false);
     }
   }, [navigate]);
 
@@ -40,9 +40,7 @@ function Beranda() {
   };
 
   const handleAddArtworkClick = (e) => {
-    if (!isLoggedIn) {
-    }
-    setIsMenuOpen(false); 
+    setIsMenuOpen(false);
   };
 
   return (
@@ -95,12 +93,15 @@ function Beranda() {
               >
                 Gallery Walls
               </Link>
+
               <Link
                 to={isLoggedIn ? "/add-artwork" : "/login"}
+                state={{ from: "/beranda" }}
                 className="hover:text-amber-700 transition duration-150"
               >
                 Add Artwork
               </Link>
+
               {isLoggedIn ? (
                 <Link
                   to="/profile"
@@ -111,6 +112,7 @@ function Beranda() {
               ) : (
                 <Link
                   to="/login"
+                  state={{ from: "/beranda" }}
                   className="font-semibold py-1.5 px-6 bg-[#442D1D] text-white border border-[#442D1D] rounded-3xl hover:bg-transparent hover:text-[#442D1D] transition duration-200"
                 >
                   Login
@@ -123,19 +125,35 @@ function Beranda() {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="text-[#442D1D] focus:outline-none"
               >
-                <svg
-                  className="w-7 h-7"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
+                {isMenuOpen ? (
+                  <svg
+                    className="w-7 h-7"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-7 h-7"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                )}
               </button>
             </div>
           </div>
@@ -157,8 +175,11 @@ function Beranda() {
             >
               Gallery Walls
             </Link>
+
+            {/* Tambahkan state here */}
             <Link
               to={isLoggedIn ? "/add-artwork" : "/login"}
+              state={{ from: "/beranda" }}
               onClick={handleAddArtworkClick}
               className="block w-full text-center py-3 bg-white shadow-sm rounded-xl text-[#442D1D] text-sm font-medium active:scale-95 transition-all duration-200"
             >
@@ -174,8 +195,10 @@ function Beranda() {
                 Profile
               </Link>
             ) : (
+              /* Tambahkan state here */
               <Link
                 to="/login"
+                state={{ from: "/beranda" }}
                 onClick={() => setIsMenuOpen(false)}
                 className="block w-full text-center py-3 bg-[#442D1D] shadow-md rounded-xl text-white text-sm font-bold active:scale-95 transition-all duration-200 mt-2"
               >
