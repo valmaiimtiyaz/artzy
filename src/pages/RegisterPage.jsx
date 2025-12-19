@@ -14,6 +14,8 @@ function RegisterPage() {
   const navigate = useNavigate();
 
   const API_BASE_URL = "https://artzybackend.vercel.app";
+  const token = localStorage.getItem("token");
+  const backPath = token ? "/beranda" : "/";
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -61,7 +63,7 @@ function RegisterPage() {
       <div className="w-full md:w-2/5 flex flex-col justify-center items-center md:items-start px-6 md:px-24 py-10 gap-4 md:gap-6 relative text-[#442D1D] min-h-screen md:min-h-0">
         <div className="absolute top-6 left-6 md:top-8 md:left-8 text-xl">
           <Link
-            to="/beranda" 
+            to={backPath}
             className="flex items-center gap-1 hover:opacity-75 transition"
           >
             <svg
