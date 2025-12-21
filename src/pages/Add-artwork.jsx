@@ -22,9 +22,10 @@ function AddArtwork() {
     const token = localStorage.getItem("token");
     if (!token) {
       toastError("Please login to add artwork");
-      navigate("/login");
+      navigate("/login", { state: { from: "/beranda" } });
     }
   }, [navigate]);
+
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -47,7 +48,7 @@ function AddArtwork() {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/login");
+      navigate("/login", { state: { from: "/beranda" } });
       return;
     }
 
@@ -203,7 +204,7 @@ function AddArtwork() {
             <div className="flex justify-center md:justify-end gap-4 md:gap-6 mt-4 mb-5">
               <button
                 type="submit"
-                disabled={isSubmitting} 
+                disabled={isSubmitting}
                 className={`px-6 py-2 rounded-full text-white font-medium text-base md:text-lg transition bg-[#442D1D] cursor-pointer ${
                   isSubmitting
                     ? "opacity-70 cursor-not-allowed"
@@ -216,7 +217,7 @@ function AddArtwork() {
               <button
                 type="button"
                 onClick={() => navigate("/gallery-walls")}
-                disabled={isSubmitting} 
+                disabled={isSubmitting}
                 className={`px-6 py-2 rounded-full text-white font-medium text-base md:text-lg transition bg-[#442D1D] cursor-pointer ${
                   isSubmitting
                     ? "opacity-70 cursor-not-allowed"

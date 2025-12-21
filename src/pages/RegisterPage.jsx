@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// Import useLocation
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import registerBg from "../assets/Rumah Fantasi 2.png";
 import { toastSuccess, toastError } from "../components/ToastWithProgress";
