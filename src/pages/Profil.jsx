@@ -183,15 +183,12 @@ function Profile() {
         )}
       </header>
 
-      {/* ... SISA KONTEN PROFILE (Main, Detail Info, Logout) TIDAK PERLU DIUBAH KARENA SUDAH BENAR ... */}
       <main className="flex-grow flex flex-col items-center p-4 sm:p-8 md:p-12 font-montserrat gallery-gradient-bg">
-        {/* Konten tetap sama seperti kodemu sebelumnya */}
         <div className="w-full max-w-4xl space-y-6 md:space-y-8">
           <h1 className="text-2xl md:text-4xl font-bold text-[#442D1D] mb-4 md:mb-8 text-center md:text-left mt-3">
             My Profile
           </h1>
 
-          {/* Section Foto & Nama */}
           <div className="w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-[20px] p-6 md:p-8 flex flex-col md:flex-row justify-between items-center md:items-start shadow-lg gap-4">
             <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 w-full md:w-auto">
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-white/50 shadow-sm overflow-hidden bg-[#442D1D]/10 flex items-center justify-center flex-shrink-0">
@@ -225,7 +222,6 @@ function Profile() {
             </button>
           </div>
 
-          {/* Personal Info */}
           <div className="w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-[20px] p-6 md:p-10 shadow-lg">
             <h3 className="text-lg md:text-xl font-bold text-[#442D1D] mb-4 md:mb-6 border-b border-[#442D1D]/20 pb-2">
               Personal Information
@@ -258,7 +254,6 @@ function Profile() {
             </div>
           </div>
 
-          {/* Profile Summary */}
           <div className="w-full bg-white/20 backdrop-blur-md border border-white/30 rounded-[20px] p-6 md:p-10 shadow-lg">
             <h3 className="text-lg md:text-xl font-bold text-[#442D1D] mb-4 md:mb-6 border-b border-[#442D1D]/20 pb-2">
               Profile Summary

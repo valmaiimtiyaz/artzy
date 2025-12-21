@@ -176,7 +176,6 @@ function Beranda() {
               Gallery Walls
             </Link>
 
-            {/* Tambahkan state here */}
             <Link
               to={isLoggedIn ? "/add-artwork" : "/login"}
               state={{ from: "/beranda" }}
@@ -195,7 +194,6 @@ function Beranda() {
                 Profile
               </Link>
             ) : (
-              /* Tambahkan state here */
               <Link
                 to="/login"
                 state={{ from: "/beranda" }}

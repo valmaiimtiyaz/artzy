@@ -106,7 +106,7 @@ function EditArtworkPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to update artwork");
       toastSuccess("Artwork updated successfully!");
-      navigate("/gallery-walls");
+      navigate(`/artwork/${id}`, { replace: true });
     } catch (err) {
       toastError(err.message);
     }
@@ -241,9 +241,10 @@ function EditArtworkPage() {
               >
                 Save Changes
               </button>
+
               <button
                 type="button"
-                onClick={() => navigate(`/artwork/${id}`)}
+                onClick={() => navigate(-1)}
                 className="px-6 py-2 rounded-full text-[#442D1D] font-medium text-base md:text-lg hover:scale-105 transition bg-[#F4EFEB] cursor-pointer"
               >
                 Cancel
